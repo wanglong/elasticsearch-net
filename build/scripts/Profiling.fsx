@@ -20,9 +20,11 @@ module Profiler =
 
     let Run() = 
         // Profile, extract Stats, create Report
-        Tooling.DotTraceProfiler.Exec [@"/app=" + profiledApp; "/profiling_type=sampling"; snapShotOutput; @"/timeout=600"; @"/use_api"; @"/transparent_exit_code"]
-        Tooling.DotTraceSnapshotStats.Exec [snapShotOutput; snapShotStatsOutput; @"/full"]
-        Tooling.DotTraceReporter.Exec [@"/reporting"; snapShotOutput; patternInput; profileOutput]
+        // Tooling.DotTraceProfiler.Exec [@"/app=" + profiledApp; "/profiling_type=sampling"; snapShotOutput; @"/timeout=600"; @"/use_api"; @"/transparent_exit_code"]
+        // Tooling.DotTraceSnapshotStats.Exec [snapShotOutput; snapShotStatsOutput; @"/full"]
+        // Tooling.DotTraceReporter.Exec [@"/reporting"; snapShotOutput; patternInput; profileOutput]
+
+        Tooling.execProcessWithTimeout profiledApp [] (TimeSpan.FromMinutes 10.)
     
 module Benchmarker =
    let private benchmarkingApp = sprintf "%s/%s" (Paths.BinFolder("Benchmarking")) "Benchmarking.exe" 

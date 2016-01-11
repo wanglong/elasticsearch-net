@@ -23,10 +23,10 @@ namespace Profiling.Async
 
 			output.Write($"Start {this.GetType().Name} operation");
 
-			using (Profiler.Start())
-			{
-				await ProfileAsync(client, output).ConfigureAwait(false);
-			}
+			//using (Profiler.Start())
+			//{
+			//	await ProfileAsync(client, output).ConfigureAwait(false);
+			//}
 
 			output.Write($"Finished {this.GetType().Name} operation");
 
