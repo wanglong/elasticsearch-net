@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Elasticsearch.Net;
 using FluentAssertions;
 using Nest;
 using Tests.Framework;
 
 namespace Tests.CodeStandards
 {
-	/** == Naming Conventions
+	/** # Naming Conventions
 	*
 	* NEST uses the following naming conventions (with _some_ exceptions).
 	*/
 	public class NamingConventions
 	{
-		/** === Class Names
+		/** ## Class Names
 		*
 		* Abstract class names should end with a `Base` suffix
 		*/
@@ -27,13 +24,13 @@ namespace Tests.CodeStandards
 				typeof(DateMath)
 			};
 
-			var abstractClassesNotEndingInBase = typeof(IRequest).Assembly().GetTypes()
+			var abstractClasses = typeof(IRequest).Assembly().GetTypes()
 				.Where(t => t.IsClass() && t.IsAbstract() && !t.IsSealed() && !exceptions.Contains(t))
 				.Where(t => !t.Name.Split('`')[0].EndsWith("Base"))
 				.Select(t => t.Name.Split('`')[0])
 				.ToList();
 
-			abstractClassesNotEndingInBase.Should().BeEmpty();
+			abstractClasses.Should().BeEmpty();
 		}
 
 		/**
@@ -46,14 +43,14 @@ namespace Tests.CodeStandards
 			var baseClassesNotAbstract = typeof(IRequest).Assembly().GetTypes()
 				.Where(t => t.IsClass() && !exceptions.Contains(t))
 				.Where(t => t.Name.Split('`')[0].EndsWith("Base"))
-				.Where(t => !t.IsAbstract())
+				.Where(t => !t.IsAbstractClass())
 				.Select(t => t.Name.Split('`')[0])
 				.ToList();
 
 			baseClassesNotAbstract.Should().BeEmpty();
 		}
 
-		/** === Requests and Responses
+		/** ## Requests and Responses
 		*
 		* Request class names should end with `Request`
 		*/
@@ -61,14 +58,14 @@ namespace Tests.CodeStandards
 		public void RequestClassNamesEndWithRequest()
 		{
 			var types = typeof(IRequest).Assembly().GetTypes();
-			var requestsNotEndingInRequest = types
+			var requests = types
 				.Where(t => typeof(IRequest).IsAssignableFrom(t) && !t.IsAbstract())
 				.Where(t => !typeof(IDescriptor).IsAssignableFrom(t))
 				.Where(t => !t.Name.Split('`')[0].EndsWith("Request"))
 				.Select(t => t.Name.Split('`')[0])
 				.ToList();
 
-			requestsNotEndingInRequest.Should().BeEmpty();
+			requests.Should().BeEmpty();
 		}
 
 		/**
@@ -78,33 +75,54 @@ namespace Tests.CodeStandards
 		public void ResponseClassNamesEndWithResponse()
 		{
 			var types = typeof(IRequest).Assembly().GetTypes();
-			var responsesNotEndingInResponse = types
+			var responses = types
 				.Where(t => typeof(IResponse).IsAssignableFrom(t) && !t.IsAbstract())
 				.Where(t => !t.Name.Split('`')[0].EndsWith("Response"))
 				.Select(t => t.Name.Split('`')[0])
 				.ToList();
 
-			responsesNotEndingInResponse.Should().BeEmpty();
+			responses.Should().BeEmpty();
 		}
 
 		/**
 		* Request and Response class names should be one to one in *most* cases.
 		* e.g. `ValidateRequest` => `ValidateResponse`, and not `ValidateQueryRequest` => `ValidateResponse`
 		* There are a few exceptions to this rule, most notably the `Cat` prefixed requests and
-		* the `Exists` requests.
+		* `Exists` requests.
 		*/
 		//[U]
 		// TODO unignore when new APIs are mapped
 		public void ParityBetweenRequestsAndResponses()
 		{
-			var exceptions = new[] // <1> _Exceptions to the rule_
+			// Add any exceptions to the rule here.
+			var exceptions = new[]
 			{
+				typeof(CatAliasesRequest),
+				typeof(CatAllocationRequest),
+				typeof(CatCountRequest),
+				typeof(CatFielddataRequest),
+				typeof(CatHealthRequest),
+				typeof(CatHelpRequest),
+				typeof(CatIndicesRequest),
+				typeof(CatMasterRequest),
+				typeof(CatNodesRequest),
+				typeof(CatPendingTasksRequest),
+				typeof(CatPluginsRequest),
+				typeof(CatRecoveryRequest),
+				typeof(CatSegmentsRequest),
+				typeof(CatShardsRequest),
+				typeof(CatThreadPoolRequest),
+				typeof(CatRepositoriesRequest),
+				typeof(CatSnapshotsRequest),
+				typeof(IndicesForcemergeRequest),
 				typeof(DocumentExistsRequest),
 				typeof(DocumentExistsRequest<>),
 				typeof(AliasExistsRequest),
 				typeof(IndexExistsRequest),
 				typeof(TypeExistsRequest),
 				typeof(IndexTemplateExistsRequest),
+				typeof(SearchExistsRequest),
+				typeof(SearchExistsRequest<>),
 				typeof(SearchTemplateRequest),
 				typeof(SearchTemplateRequest<>),
 				typeof(ScrollRequest),
@@ -112,13 +130,11 @@ namespace Tests.CodeStandards
 				typeof(SourceRequest<>),
 				typeof(ValidateQueryRequest<>),
 				typeof(GetAliasRequest),
+#pragma warning disable 612
+				typeof(CatNodeattrsRequest),
+#pragma warning restore 612
 				typeof(IndicesShardStoresRequest),
-				typeof(RenderSearchTemplateRequest),
-				//UNMAPPED
-				typeof(ClusterAllocationExplainRequest),
-				typeof(ReindexRethrottleRequest),
-				//typeof(ReindexRequest),
-				typeof(UpdateByQueryRequest)
+				typeof(RenderSearchTemplateRequest)
 			};
 
 			var types = typeof(IRequest).Assembly().GetTypes();
@@ -129,7 +145,6 @@ namespace Tests.CodeStandards
 					!t.IsAbstract() &&
 					typeof(IRequest).IsAssignableFrom(t) &&
 					!typeof(IDescriptor).IsAssignableFrom(t)
-					&& !t.Name.StartsWith("Cat")
 					&& !exceptions.Contains(t))
 				.Select(t => t.Name.Split('`')[0].Replace("Request", ""))
 			);
@@ -139,137 +154,6 @@ namespace Tests.CodeStandards
 				.Select(t => t.Name.Split('`')[0].Replace("Response", ""));
 
 			requests.Except(responses).Should().BeEmpty();
-		}
-
-		[U]
-		public void AllNestTypesAreInNestNamespace()
-		{
-			var nestAssembly = typeof(IElasticClient).Assembly();
-
-			var exceptions = new List<Type>
-			{
-				nestAssembly.GetType("System.AssemblyVersionInformation"),
-#if DOTNETCORE
-				typeof(SynchronizedCollection<>),
-				nestAssembly.GetType("System.ComponentModel.Browsable")
-#endif
-			};
-
-			var types = nestAssembly.GetTypes();
-			var typesNotInNestNamespace = types
-				.Where(t => !exceptions.Contains(t))
-				.Where(t => t.Namespace != "Nest")
-				.Where(t => !t.Name.StartsWith("<"))
-				.Where(t => IsValidTypeNameOrIdentifier(t.Name, true))
-				.ToList();
-
-			typesNotInNestNamespace.Should().BeEmpty();
-		}
-
-		[U]
-		public void AllElasticsearchNetTypesAreInElasticsearchNetNamespace()
-		{
-			var elasticsearchNetAssembly = typeof(IElasticLowLevelClient).Assembly();
-
-			var exceptions = new List<Type>
-			{
-				elasticsearchNetAssembly.GetType("System.AssemblyVersionInformation"),
-				elasticsearchNetAssembly.GetType("System.FormattableString"),
-				elasticsearchNetAssembly.GetType("System.Runtime.CompilerServices.FormattableStringFactory"),
-				elasticsearchNetAssembly.GetType("System.Runtime.CompilerServices.FormattableStringFactory"),
-				elasticsearchNetAssembly.GetType("Purify.Purifier"),
-				elasticsearchNetAssembly.GetType("Purify.Purifier+IPurifier"),
-				elasticsearchNetAssembly.GetType("Purify.Purifier+PurifierDotNet"),
-				elasticsearchNetAssembly.GetType("Purify.Purifier+PurifierMono"),
-				elasticsearchNetAssembly.GetType("Purify.Purifier+UriInfo"),
-#if DOTNETCORE
-				elasticsearchNetAssembly.GetType("System.ComponentModel.Browsable")
-#endif
-			};
-
-			var types = elasticsearchNetAssembly.GetTypes();
-			var typesNotIElasticsearchNetNamespace = types
-				.Where(t => !exceptions.Contains(t))
-				.Where(t => t.Namespace != "Elasticsearch.Net")
-				.Where(t => !t.Name.StartsWith("<"))
-				.Where(t => IsValidTypeNameOrIdentifier(t.Name, true))
-				.ToList();
-
-			typesNotIElasticsearchNetNamespace.Should().BeEmpty();
-		}
-
-		/// implementation from System.CodeDom.Compiler.CodeGenerator.IsValidLanguageIndependentIdentifier(string value)
-		private static bool IsValidTypeNameOrIdentifier(string value, bool isTypeName)
-		{
-			bool nextMustBeStartChar = true;
-			if (value.Length == 0)
-				return false;
-			for (int index = 0; index < value.Length; ++index)
-			{
-				var character = value[index];
-#if DOTNETCORE
-				var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(character);
-#else
-				var unicodeCategory = char.GetUnicodeCategory(character);
-#endif
-				switch (unicodeCategory)
-				{
-					case UnicodeCategory.UppercaseLetter:
-					case UnicodeCategory.LowercaseLetter:
-					case UnicodeCategory.TitlecaseLetter:
-					case UnicodeCategory.ModifierLetter:
-					case UnicodeCategory.OtherLetter:
-					case UnicodeCategory.LetterNumber:
-						nextMustBeStartChar = false;
-						break;
-					case UnicodeCategory.NonSpacingMark:
-					case UnicodeCategory.SpacingCombiningMark:
-					case UnicodeCategory.DecimalDigitNumber:
-					case UnicodeCategory.ConnectorPunctuation:
-						if (nextMustBeStartChar && (int)character != 95)
-							return false;
-						nextMustBeStartChar = false;
-						break;
-					default:
-						if (!isTypeName || !IsSpecialTypeChar(character, ref nextMustBeStartChar))
-							return false;
-						break;
-				}
-			}
-			return true;
-		}
-
-		private static bool IsSpecialTypeChar(char ch, ref bool nextMustBeStartChar)
-		{
-			if ((uint)ch <= 62U)
-			{
-				switch (ch)
-				{
-					case '$':
-					case '&':
-					case '*':
-					case '+':
-					case ',':
-					case '-':
-					case '.':
-					case ':':
-					case '<':
-					case '>':
-						break;
-					default:
-						goto label_6;
-				}
-			}
-			else if ((int)ch != 91 && (int)ch != 93)
-			{
-				if ((int)ch == 96)
-					return true;
-				goto label_6;
-			}
-			nextMustBeStartChar = true;
-			return true;
-			label_6:
-			return false;
 		}
 	}
 }

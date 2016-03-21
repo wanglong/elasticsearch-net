@@ -19,10 +19,10 @@ namespace Tests.Cat.CatSnapshots
 
 		public CatSnapshotsApiTests(IntrusiveOperationCluster cluster, EndpointUsage usage) : base(cluster, usage) { }
 
-		protected override void IntegrationSetup(IElasticClient client, CallUniqueValues values)
+		protected override void BeforeAllCalls(IElasticClient client, IDictionary<ClientMethod, string> values)
 		{
 			if (!TestClient.Configuration.RunIntegrationTests) return;
-			var repositoryLocation = Path.Combine(this.Cluster.Node.FileSystem.RepositoryPath, RandomString());
+			var repositoryLocation = Path.Combine(this._cluster.Node.RepositoryPath, RandomString());
 
 			var create = this.Client.CreateRepository(RepositoryName, cr => cr
 				.FileSystem(fs => fs
