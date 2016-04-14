@@ -47,6 +47,9 @@ namespace Tests.Framework
 
 		protected ApiTestBase(ClusterBase cluster, EndpointUsage usage) : base(cluster)
 		{
+			if (cluster == null) throw new ArgumentNullException(nameof(cluster));
+			if (usage == null) throw new ArgumentNullException(nameof(usage));
+
 			this._usage = usage;
 			this.Cluster = cluster;
 
