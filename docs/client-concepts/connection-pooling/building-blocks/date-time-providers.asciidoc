@@ -40,7 +40,7 @@ to provide a custom implementation for.
 var dateTimeProvider = DateTimeProvider.Default;
 ----
 
-The default timeout calculation is: `min(timeout * 2 ^ (attempts * 0.5 -1), maxTimeout)`, where the 
+The default timeout calculation is: `min(timeout * 2 ^ (attempts * 0.5 -1), maxTimeout)`, where the
 default values for `timeout` and `maxTimeout` are
 
 [source,csharp]
