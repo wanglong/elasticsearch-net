@@ -21,6 +21,7 @@ nuget NDesk.Options
 nuget BenchmarkDotNet prerelease
 
 nuget System.Reactive
+nuget SemanticVersioning
 
 source https://api.nuget.org/v3/index.json
 
