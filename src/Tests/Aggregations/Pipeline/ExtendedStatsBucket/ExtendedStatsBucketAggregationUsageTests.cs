@@ -7,6 +7,7 @@ using Tests.Framework.MockData;
 
 namespace Tests.Aggregations.Pipeline.ExtendedStatsBucket
 {
+	[SkipVersion("<2.1.0", "")]
 	public class ExtendedStatsBucketAggregationUsageTests : AggregationUsageTestBase
 	{
 		public ExtendedStatsBucketAggregationUsageTests(ReadOnlyCluster cluster, EndpointUsage usage) : base(cluster, usage) { }

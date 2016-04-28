@@ -27,7 +27,7 @@ namespace Tests.Framework.Integration
 		{
 			{ "delete-by-query", _ => "delete-by-query" },
 			{ "cloud-azure", _ => "cloud-azure" },
-			{ "mapper-attachments", MapperAttachmentPlugin.GetVersion },
+			{ "elasticsearch-mapper-attachments ", MapperAttachmentPlugin.GetVersion },
 			{ "mapper-murmur3", _ => "mapper-murmur3" },
 		};
 
