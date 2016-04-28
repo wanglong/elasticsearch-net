@@ -8,6 +8,7 @@ using static Nest.Infer;
 
 namespace Tests.Aggregations.Metric.ExtendedStats
 {
+	[SkipVersion("<2.2.0", "")]
 	public class ExtendedStatsAggregationUsageTests : AggregationUsageTestBase
 	{
 		public ExtendedStatsAggregationUsageTests(ReadOnlyCluster i, EndpointUsage usage) : base(i, usage) { }
