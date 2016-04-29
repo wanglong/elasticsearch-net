@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using System.Threading;
 
 namespace Nest
 {
@@ -14,10 +13,10 @@ namespace Nest
 		IPutUserResponse PutUser(IPutUserRequest request);
 
 		/// <inheritdoc/>
-		Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null);
 
 		/// <inheritdoc/>
-		Task<IPutUserResponse> PutUserAsync(IPutUserRequest request, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IPutUserResponse> PutUserAsync(IPutUserRequest request);
 	}
 
 	public partial class ElasticClient
@@ -30,19 +29,18 @@ namespace Nest
 		public IPutUserResponse PutUser(IPutUserRequest request) =>
 			this.Dispatcher.Dispatch<IPutUserRequest, PutUserRequestParameters, PutUserResponse>(
 				request,
-				this.LowLevelDispatch.XpackSecurityPutUserDispatch<PutUserResponse>
+				this.LowLevelDispatch.ShieldPutUserDispatch<PutUserResponse>
 			);
 
 		/// <inheritdoc/>
-		public Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.PutUserAsync(selector.InvokeOrDefault(new PutUserDescriptor(username)), cancellationToken);
+		public Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null) =>
+			this.PutUserAsync(selector.InvokeOrDefault(new PutUserDescriptor(username)));
 
 		/// <inheritdoc/>
-		public Task<IPutUserResponse> PutUserAsync(IPutUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
+		public Task<IPutUserResponse> PutUserAsync(IPutUserRequest request) =>
 			this.Dispatcher.DispatchAsync<IPutUserRequest, PutUserRequestParameters, PutUserResponse, IPutUserResponse>(
 				request,
-				cancellationToken,
-				this.LowLevelDispatch.XpackSecurityPutUserDispatchAsync<PutUserResponse>
+				this.LowLevelDispatch.ShieldPutUserDispatchAsync<PutUserResponse>
 			);
 	}
 }

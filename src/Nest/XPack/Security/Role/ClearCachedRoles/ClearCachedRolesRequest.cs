@@ -12,7 +12,7 @@ namespace Nest
 	{
 	}
 
-	[DescriptorFor("XpackSecurityClearCachedRoles")]
+	[DescriptorFor("ShieldClearCachedRoles")]
 	public partial class ClearCachedRolesDescriptor
 	{
 	}

@@ -8,6 +8,6 @@ namespace Nest
 
 	public partial class ClearCachedRealmsRequest { }
 
-	[DescriptorFor("XpackSecurityClearCachedRealms")]
+	[DescriptorFor("ShieldClearCachedRealms")]
 	public partial class ClearCachedRealmsDescriptor { }
 }

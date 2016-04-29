@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using System.Threading;
 
 namespace Nest
 {
@@ -14,10 +13,10 @@ namespace Nest
 		IPutRoleResponse PutRole(IPutRoleRequest request);
 
 		/// <inheritdoc/>
-		Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null);
 
 		/// <inheritdoc/>
-		Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request);
 	}
 
 	public partial class ElasticClient
@@ -30,19 +29,18 @@ namespace Nest
 		public IPutRoleResponse PutRole(IPutRoleRequest request) =>
 			this.Dispatcher.Dispatch<IPutRoleRequest, PutRoleRequestParameters, PutRoleResponse>(
 				request,
-				this.LowLevelDispatch.XpackSecurityPutRoleDispatch<PutRoleResponse>
+				this.LowLevelDispatch.ShieldPutRoleDispatch<PutRoleResponse>
 			);
 
 		/// <inheritdoc/>
-		public Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.PutRoleAsync(selector.InvokeOrDefault(new PutRoleDescriptor(role)), cancellationToken);
+		public Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null) =>
+			this.PutRoleAsync(selector.InvokeOrDefault(new PutRoleDescriptor(role)));
 
 		/// <inheritdoc/>
-		public Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
+		public Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request) =>
 			this.Dispatcher.DispatchAsync<IPutRoleRequest, PutRoleRequestParameters, PutRoleResponse, IPutRoleResponse>(
 				request,
-				cancellationToken,
-				this.LowLevelDispatch.XpackSecurityPutRoleDispatchAsync<PutRoleResponse>
+				this.LowLevelDispatch.ShieldPutRoleDispatchAsync<PutRoleResponse>
 			);
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using System.Threading;
 
 namespace Nest
 {
@@ -14,10 +13,10 @@ namespace Nest
 		IGetRoleResponse GetRole(IGetRoleRequest request);
 
 		/// <inheritdoc/>
-		Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null);
 
 		/// <inheritdoc/>
-		Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request);
 	}
 
 	public partial class ElasticClient
@@ -30,19 +29,18 @@ namespace Nest
 		public IGetRoleResponse GetRole(IGetRoleRequest request) =>
 			this.Dispatcher.Dispatch<IGetRoleRequest, GetRoleRequestParameters, GetRoleResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.XpackSecurityGetRoleDispatch<GetRoleResponse>(p)
+				(p, d) =>this.LowLevelDispatch.ShieldGetRoleDispatch<GetRoleResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.GetRoleAsync(selector.InvokeOrDefault(new GetRoleDescriptor()), cancellationToken);
+		public Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null) =>
+			this.GetRoleAsync(selector.InvokeOrDefault(new GetRoleDescriptor()));
 
 		/// <inheritdoc/>
-		public Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
+		public Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request) =>
 			this.Dispatcher.DispatchAsync<IGetRoleRequest, GetRoleRequestParameters, GetRoleResponse, IGetRoleResponse>(
 				request,
-				cancellationToken,
-				(p, d, c) => this.LowLevelDispatch.XpackSecurityGetRoleDispatchAsync<GetRoleResponse>(p, c)
+				(p,d ) => this.LowLevelDispatch.ShieldGetRoleDispatchAsync<GetRoleResponse>(p)
 			);
 	}
 }

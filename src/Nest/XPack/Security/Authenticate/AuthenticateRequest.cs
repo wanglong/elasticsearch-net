@@ -12,7 +12,7 @@ namespace Nest
 	{
 	}
 
-	[DescriptorFor("XpackSecurityAuthenticate")]
+	[DescriptorFor("ShieldAuthenticate")]
 	public partial class AuthenticateDescriptor
 	{
 	}

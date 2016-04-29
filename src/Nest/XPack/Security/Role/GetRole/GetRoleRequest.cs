@@ -12,7 +12,7 @@ namespace Nest
 	{
 	}
 
-	[DescriptorFor("XpackSecurityGetRole")]
+	[DescriptorFor("ShieldGetRole")]
 	public partial class GetRoleDescriptor
 	{
 	}

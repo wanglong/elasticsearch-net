@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using System.Threading;
 
 namespace Nest
 {
@@ -14,10 +13,10 @@ namespace Nest
 		IGetUserResponse GetUser(IGetUserRequest request);
 
 		/// <inheritdoc/>
-		Task<IGetUserResponse> GetUserAsync(Func<GetUserDescriptor, IGetUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IGetUserResponse> GetUserAsync(Func<GetUserDescriptor, IGetUserRequest> selector = null);
 
 		/// <inheritdoc/>
-		Task<IGetUserResponse> GetUserAsync(IGetUserRequest request, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IGetUserResponse> GetUserAsync(IGetUserRequest request);
 	}
 
 	public partial class ElasticClient
@@ -30,19 +29,18 @@ namespace Nest
 		public IGetUserResponse GetUser(IGetUserRequest request) =>
 			this.Dispatcher.Dispatch<IGetUserRequest, GetUserRequestParameters, GetUserResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.XpackSecurityGetUserDispatch<GetUserResponse>(p)
+				(p, d) =>this.LowLevelDispatch.ShieldGetUserDispatch<GetUserResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IGetUserResponse> GetUserAsync(Func<GetUserDescriptor, IGetUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.GetUserAsync(selector.InvokeOrDefault(new GetUserDescriptor()), cancellationToken);
+		public Task<IGetUserResponse> GetUserAsync(Func<GetUserDescriptor, IGetUserRequest> selector = null) =>
+			this.GetUserAsync(selector.InvokeOrDefault(new GetUserDescriptor()));
 
 		/// <inheritdoc/>
-		public Task<IGetUserResponse> GetUserAsync(IGetUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
+		public Task<IGetUserResponse> GetUserAsync(IGetUserRequest request) =>
 			this.Dispatcher.DispatchAsync<IGetUserRequest, GetUserRequestParameters, GetUserResponse, IGetUserResponse>(
 				request,
-				cancellationToken,
-				(p, d, c) => this.LowLevelDispatch.XpackSecurityGetUserDispatchAsync<GetUserResponse>(p, c)
+				(p,d ) => this.LowLevelDispatch.ShieldGetUserDispatchAsync<GetUserResponse>(p)
 			);
 	}
 }

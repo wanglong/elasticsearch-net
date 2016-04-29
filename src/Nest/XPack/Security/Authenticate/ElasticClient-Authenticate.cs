@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using System.Threading;
 
 namespace Nest
 {
@@ -14,10 +13,10 @@ namespace Nest
 		IAuthenticateResponse Authenticate(IAuthenticateRequest request);
 
 		/// <inheritdoc/>
-		Task<IAuthenticateResponse> AuthenticateAsync(Func<AuthenticateDescriptor, IAuthenticateRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IAuthenticateResponse> AuthenticateAsync(Func<AuthenticateDescriptor, IAuthenticateRequest> selector = null);
 
 		/// <inheritdoc/>
-		Task<IAuthenticateResponse> AuthenticateAsync(IAuthenticateRequest request, CancellationToken cancellationToken = default(CancellationToken));
+		Task<IAuthenticateResponse> AuthenticateAsync(IAuthenticateRequest request);
 	}
 
 	public partial class ElasticClient
@@ -30,19 +29,18 @@ namespace Nest
 		public IAuthenticateResponse Authenticate(IAuthenticateRequest request) =>
 			this.Dispatcher.Dispatch<IAuthenticateRequest, AuthenticateRequestParameters, AuthenticateResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.XpackSecurityAuthenticateDispatch<AuthenticateResponse>(p)
+				(p, d) =>this.LowLevelDispatch.ShieldAuthenticateDispatch<AuthenticateResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IAuthenticateResponse> AuthenticateAsync(Func<AuthenticateDescriptor, IAuthenticateRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.AuthenticateAsync(selector.InvokeOrDefault(new AuthenticateDescriptor()), cancellationToken);
+		public Task<IAuthenticateResponse> AuthenticateAsync(Func<AuthenticateDescriptor, IAuthenticateRequest> selector = null) =>
+			this.AuthenticateAsync(selector.InvokeOrDefault(new AuthenticateDescriptor()));
 
 		/// <inheritdoc/>
-		public Task<IAuthenticateResponse> AuthenticateAsync(IAuthenticateRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
+		public Task<IAuthenticateResponse> AuthenticateAsync(IAuthenticateRequest request) =>
 			this.Dispatcher.DispatchAsync<IAuthenticateRequest, AuthenticateRequestParameters, AuthenticateResponse, IAuthenticateResponse>(
 				request,
-				cancellationToken,
-				(p, d, c) => this.LowLevelDispatch.XpackSecurityAuthenticateDispatchAsync<AuthenticateResponse>(p, c)
+				(p,d ) => this.LowLevelDispatch.ShieldAuthenticateDispatchAsync<AuthenticateResponse>(p)
 			);
 	}
 }

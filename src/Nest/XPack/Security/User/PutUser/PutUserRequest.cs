@@ -31,7 +31,7 @@ namespace Nest
 		public IDictionary<string, object> Metadata { get; set; }
 	}
 
-	[DescriptorFor("XpackSecurityPutUser")]
+	[DescriptorFor("ShieldPutUser")]
 	public partial class PutUserDescriptor
 	{
 		string IPutUserRequest.Password { get; set; }
