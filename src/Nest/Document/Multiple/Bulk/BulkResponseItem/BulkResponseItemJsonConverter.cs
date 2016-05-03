@@ -45,8 +45,9 @@ namespace Nest
 					createItem.Operation = key;
 					reader.Read();
 					return createItem;
+				default:
+					return null;
 			}
-			return null;
 		}
 
 		public override bool CanConvert(Type objectType)
