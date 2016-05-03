@@ -10,7 +10,8 @@ namespace Nest
 		public override string Operation { get; internal set; }
 
         /// <summary>
-        /// Null if Percolation was not requested while indexing this doc, otherwise returns the percolator _ids that matched (if any)
+        /// Null if Percolation was not requested while indexing this doc,
+        /// otherwise returns the percolator _ids that matched (if any)
         /// </summary>
         [JsonProperty(PropertyName = "matches")]
         public IEnumerable<string> Matches { get; internal set; }

@@ -13,7 +13,7 @@ namespace Tests
 	{
 		public static void Main(string[] args)
 		{
-			var summary = BenchmarkRunner.Run<BulkApiTests>(new Config());
+			var summary = BenchmarkRunner.Run<BulkBenchmarkTests>();
 		}
 
 		class Config : ManualConfig
