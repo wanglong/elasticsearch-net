@@ -6,6 +6,7 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using Tests.Document.Multiple.Bulk;
 using BenchmarkDotNet.Jobs;
+using Tests.ClientConcepts.HighLevel.Caching;
 
 namespace Tests
 {
@@ -13,7 +14,8 @@ namespace Tests
 	{
 		public static void Main(string[] args)
 		{
-			var summary = BenchmarkRunner.Run<BulkBenchmarkTests>();
+			BenchmarkRunner.Run<FieldResolverBenchmarkTests>();
+			BenchmarkRunner.Run<PropertyNameResolverBenchmarkTests>();
 		}
 
 		class Config : ManualConfig
