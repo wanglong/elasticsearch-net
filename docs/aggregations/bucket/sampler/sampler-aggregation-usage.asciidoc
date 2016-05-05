@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/Aggregations/Bucket/Sampler/SamplerAggregationUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[sampler-aggregation-usage]]
 == Sampler Aggregation Usage
@@ -23,6 +15,7 @@ s => s
 .Aggregations(aggs => aggs
     .Sampler("sample", sm => sm
         .ShardSize(200)
+        .Field(p => p.Name)
         .Aggregations(aa => aa
             .SignificantTerms("significant_names", st => st
                 .Field(p => p.Name)
@@ -41,6 +34,7 @@ new SearchRequest<Project>
     Aggregations = new SamplerAggregation("sample")
     {
         ShardSize = 200,
+        Field = "name",
         Aggregations = new SignificantTermsAggregation("significant_names")
         {
             Field = "name"
@@ -56,7 +50,8 @@ new SearchRequest<Project>
   "aggs": {
     "sample": {
       "sampler": {
-        "shard_size": 200
+        "shard_size": 200,
+        "field": "name"
       },
       "aggs": {
         "significant_names": {

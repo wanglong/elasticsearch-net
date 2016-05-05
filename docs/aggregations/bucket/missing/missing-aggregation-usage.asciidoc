@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/Aggregations/Bucket/Missing/MissingAggregationUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[missing-aggregation-usage]]
 == Missing Aggregation Usage
@@ -22,7 +14,7 @@ please modify the original csharp file found at the link and submit the PR with 
 s => s
 .Aggregations(a => a
     .Missing("projects_without_a_description", m => m
-        .Field(p => p.Description.Suffix("keyword"))
+        .Field(p => p.Description)
     )
 )
 ----
@@ -35,7 +27,7 @@ new SearchRequest<Project>
 {
     Aggregations = new MissingAggregation("projects_without_a_description")
     {
-        Field = Field<Project>(p => p.Description.Suffix("keyword"))
+        Field = Field<Project>(p => p.Description)
     }
 }
 ----
@@ -47,7 +39,7 @@ new SearchRequest<Project>
   "aggs": {
     "projects_without_a_description": {
       "missing": {
-        "field": "description.keyword"
+        "field": "description"
       }
     }
   }

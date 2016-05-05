@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/QueryDsl/Specialized/Script/ScriptQueryUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[script-query-usage]]
 == Script Query Usage
@@ -26,9 +18,8 @@ See the Elasticsearch documentation on {ref_current}/query-dsl-script-query.html
 q
 .Script(sn => sn
     .Name("named_query")
-    .Boost(1.1)
     .Inline(_templateString)
-    .Params(p=>p.Add("param1", 50))
+    .Params(p => p.Add("param1", 50))
 )
 ----
 
@@ -39,7 +30,6 @@ q
 new ScriptQuery
 {
     Name = "named_query",
-    Boost = 1.1,
     Inline = _templateString,
     Params = new Dictionary<string, object>
     {
@@ -54,7 +44,6 @@ new ScriptQuery
 {
   "script": {
     "_name": "named_query",
-    "boost": 1.1,
     "script": {
       "inline": "doc['numberOfCommits'].value > param1",
       "params": {

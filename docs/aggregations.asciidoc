@@ -3,14 +3,6 @@
 [[aggregations]]
 = Aggregations
 
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/aggregations.asciidoc. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
-
 [partintro]
 --
 Aggregations are arguably one of the most powerful features of Elasticsearch and NEST
@@ -57,8 +49,6 @@ exposes all of the available Aggregation types
 * <<extended-stats-aggregation-usage,Extended Stats Aggregation Usage>>
 
 * <<geo-bounds-aggregation-usage,Geo Bounds Aggregation Usage>>
-
-* <<geo-centroid-aggregation-usage,Geo Centroid Aggregation Usage>>
 
 * <<max-aggregation-usage,Max Aggregation Usage>>
 

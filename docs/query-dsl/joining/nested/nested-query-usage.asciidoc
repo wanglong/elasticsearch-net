@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/QueryDsl/Joining/Nested/NestedQueryUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[nested-query-usage]]
 == Nested Query Usage
@@ -37,7 +29,6 @@ q
             .Terms("lorem", "ipsum")
         )
     )
-    .IgnoreUnmapped()
 )
 ----
 
@@ -55,8 +46,7 @@ new NestedQuery
     {
         Field = Field<Project>(p => p.CuratedTags.First().Name),
         Terms = new[] { "lorem", "ipsum" }
-    },
-    IgnoreUnmapped = false
+    }
 }
 ----
 
@@ -75,7 +65,6 @@ new NestedQuery
         ]
       }
     },
-    "ignore_unmapped": false,
     "path": "curatedTags",
     "inner_hits": {
       "explain": true

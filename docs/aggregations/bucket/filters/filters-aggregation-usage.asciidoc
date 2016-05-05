@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/Aggregations/Bucket/Filters/FiltersAggregationUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[filters-aggregation-usage]]
 == Filters Aggregation Usage
@@ -40,7 +32,7 @@ s => s
             .Filter("very_active", f => f.Term(p => p.State, StateOfBeing.VeryActive))
         )
         .Aggregations(childAggs => childAggs
-            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name.Suffix("keyword")))
+            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name))
         )
     )
 )
@@ -58,12 +50,12 @@ new SearchRequest<Project>
         OtherBucketKey = "other_states_of_being",
         Filters = new NamedFiltersContainer
         {
-                { "belly_up", Query<Project>.Term(p=>p.State, StateOfBeing.BellyUp) },
-                { "stable", Query<Project>.Term(p=>p.State, StateOfBeing.Stable) },
-                { "very_active", Query<Project>.Term(p=>p.State, StateOfBeing.VeryActive) }
+            { "belly_up", Query<Project>.Term(p=>p.State, StateOfBeing.BellyUp) },
+            { "stable", Query<Project>.Term(p=>p.State, StateOfBeing.Stable) },
+            { "very_active", Query<Project>.Term(p=>p.State, StateOfBeing.VeryActive) }
         },
         Aggregations =
-            new TermsAggregation("project_tags") { Field = Field<Project>(p => p.CuratedTags.First().Name.Suffix("keyword")) }
+            new TermsAggregation("project_tags") { Field = Field<Project>(p => p.CuratedTags.First().Name) }
     }
 }
 ----
@@ -104,7 +96,7 @@ new SearchRequest<Project>
       "aggs": {
         "project_tags": {
           "terms": {
-            "field": "curatedTags.name.keyword"
+            "field": "curatedTags.name"
           }
         }
       }
@@ -156,7 +148,7 @@ s => s
             f => f.Term(p => p.State, StateOfBeing.VeryActive)
         )
         .Aggregations(childAggs => childAggs
-            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name.Suffix("keyword")))
+            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name))
         )
     )
 )
@@ -173,12 +165,15 @@ new SearchRequest<Project>
         OtherBucket = true,
         Filters = new List<QueryContainer>
         {
-                 Query<Project>.Term(p=>p.State, StateOfBeing.BellyUp) ,
-                 Query<Project>.Term(p=>p.State, StateOfBeing.Stable) ,
-                 Query<Project>.Term(p=>p.State, StateOfBeing.VeryActive)
+            Query<Project>.Term(p=>p.State, StateOfBeing.BellyUp) ,
+            Query<Project>.Term(p=>p.State, StateOfBeing.Stable) ,
+            Query<Project>.Term(p=>p.State, StateOfBeing.VeryActive)
         },
         Aggregations =
-            new TermsAggregation("project_tags") { Field = Field<Project>(p => p.CuratedTags.First().Name.Suffix("keyword")) }
+            new TermsAggregation("project_tags")
+            {
+                Field = Field<Project>(p => p.CuratedTags.First().Name)
+            }
     }
 }
 ----
@@ -218,7 +213,7 @@ new SearchRequest<Project>
       "aggs": {
         "project_tags": {
           "terms": {
-            "field": "curatedTags.name.keyword"
+            "field": "curatedTags.name"
           }
         }
       }

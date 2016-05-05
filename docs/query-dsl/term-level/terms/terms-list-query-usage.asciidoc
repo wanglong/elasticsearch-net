@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/QueryDsl/TermLevel/Terms/TermsListQueryUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[terms-list-query-usage]]
 == Terms List Query Usage
@@ -24,6 +16,8 @@ q
     .Name("named_query")
     .Boost(1.1)
     .Field(p => p.Description)
+    .DisableCoord()
+    .MinimumShouldMatch(MinimumShouldMatch.Fixed(2))
     .Terms(new List<string> { "term1", "term2" })
 )
 ----
@@ -37,7 +31,9 @@ new TermsQuery
     Name = "named_query",
     Boost = 1.1,
     Field = "description",
-    Terms = new List<string> { "term1", "term2" }
+    Terms = new List<string> { "term1", "term2" },
+    DisableCoord = true,
+    MinimumShouldMatch = 2
 }
 ----
 
@@ -51,7 +47,9 @@ new TermsQuery
     "description": [
       "term1",
       "term2"
-    ]
+    ],
+    "disable_coord": true,
+    "minimum_should_match": 2
   }
 }
 ----
@@ -65,6 +63,7 @@ q
     .Name("named_query")
     .Boost(1.1)
     .Field(p => p.Description)
+    .DisableCoord()
     .Terms(_terms)
 )
 ----
@@ -78,7 +77,8 @@ new TermsQuery
     Name = "named_query",
     Boost = 1.1,
     Field = "description",
-    Terms = _terms
+    Terms = _terms,
+    DisableCoord = true,
 }
 ----
 
@@ -94,23 +94,10 @@ new TermsQuery
         "term1",
         "term2"
       ]
-    ]
+    ],
+    "disable_coord": true
   }
 }
-----
-
-=== Handling Responses
-
-[source,csharp]
-----
-response.IsValid.Should().BeFalse();
-response.ServerError.Should().NotBeNull();
-response.ServerError.Status.Should().Be(400);
-response.ServerError.Error.Should().NotBeNull();
-var rootCauses = response.ServerError.Error.RootCause;
-rootCauses.Should().NotBeNullOrEmpty();
-var rootCause = rootCauses.First();
-rootCause.Type.Should().Be("parsing_exception");
 ----
 
 === Fluent DSL Example
@@ -122,6 +109,7 @@ q
     .Name("named_query")
     .Boost(1.1)
     .Field(p => p.NumberOfCommits)
+    .DisableCoord()
     .Terms(_terms)
 )
 ----
@@ -136,6 +124,7 @@ new TermsQuery
     Boost = 1.1,
     Field = "numberOfCommits",
     Terms = _terms,
+    DisableCoord = true,
 }
 ----
 
@@ -151,21 +140,9 @@ new TermsQuery
         "term1",
         "term2"
       ]
-    ]
+    ],
+    "disable_coord": true
   }
 }
-----
-
-=== Handling Responses
-
-[source,csharp]
-----
-response.ServerError.Should().NotBeNull();
-response.ServerError.Status.Should().Be(400);
-response.ServerError.Error.Should().NotBeNull();
-var rootCauses = response.ServerError.Error.RootCause;
-rootCauses.Should().NotBeNullOrEmpty();
-var rootCause = rootCauses.First();
-rootCause.Type.Should().Be("parsing_exception");
 ----
 

@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/Aggregations/Bucket/Filter/FilterAggregationUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[filter-aggregation-usage]]
 == Filter Aggregation Usage
@@ -29,7 +21,7 @@ s => s
     .Filter("bethels_projects", date => date
         .Filter(q => q.Term(p => p.LeadDeveloper.FirstName, FirstNameToFind))
         .Aggregations(childAggs => childAggs
-            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name.Suffix("keyword")))
+            .Terms("project_tags", avg => avg.Field(p => p.CuratedTags.First().Name))
         )
     )
 )
@@ -45,7 +37,7 @@ new SearchRequest<Project>
     {
         Filter = new TermQuery {Field = Field<Project>(p => p.LeadDeveloper.FirstName), Value = FirstNameToFind},
         Aggregations =
-            new TermsAggregation("project_tags") { Field = Field<Project>(p => p.CuratedTags.First().Name.Suffix("keyword")) }
+            new TermsAggregation("project_tags") {Field = Field<Project>(p => p.CuratedTags.First().Name)}
     }
 }
 ----
@@ -66,7 +58,7 @@ new SearchRequest<Project>
       "aggs": {
         "project_tags": {
           "terms": {
-            "field": "curatedTags.name.keyword"
+            "field": "curatedTags.name"
           }
         }
       }
@@ -150,6 +142,10 @@ new SearchRequest<Project>
 response.ShouldBeValid();
 response.Aggs.Filter("empty_filter").DocCount.Should().BeGreaterThan(0);
 ----
+
+[[inline-script-filter]]
+[float]
+== Inline Script Filter
 
 === Fluent DSL Example
 

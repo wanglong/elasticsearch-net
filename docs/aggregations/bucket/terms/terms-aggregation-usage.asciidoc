@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/Aggregations/Bucket/Terms/TermsAggregationUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[terms-aggregation-usage]]
 == Terms Aggregation Usage
@@ -26,6 +18,7 @@ s => s
         .MinimumDocumentCount(2)
         .Size(5)
         .ShardSize(100)
+        .ShowTermDocumentCountError()
         .ExecutionHint(TermsAggregationExecutionHint.Map)
         .Missing("n/a")
         .Script("'State of Being: '+_value")
@@ -50,6 +43,7 @@ new SearchRequest<Project>
         MinimumDocumentCount = 2,
         Size = 5,
         ShardSize = 100,
+        ShowTermDocumentCountError = true,
         ExecutionHint = TermsAggregationExecutionHint.Map,
         Missing = "n/a",
         Script = new InlineScript("'State of Being: '+_value"),
@@ -80,6 +74,7 @@ new SearchRequest<Project>
         "min_doc_count": 2,
         "size": 5,
         "shard_size": 100,
+        "show_term_doc_error_count": true,
         "execution_hint": "map",
         "missing": "n/a",
         "script": {

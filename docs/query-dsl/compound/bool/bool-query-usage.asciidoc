@@ -1,16 +1,8 @@
-:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/master
+:ref_current: https://www.elastic.co/guide/en/elasticsearch/reference/2.3
 
 :github: https://github.com/elastic/elasticsearch-net
 
 :nuget: https://www.nuget.org/packages
-
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/QueryDsl/Compound/Bool/BoolQueryUsageTests.cs. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
 
 [[bool-query-usage]]
 == Bool Query Usage
@@ -73,19 +65,5 @@ new BoolQuery()
     "boost": 2.0
   }
 }
-----
-
-[source,csharp]
-----
-Action query = () => this.Client.Search<Project>(s => s
-        .Query(q => q
-            .Bool(b => b
-                .Filter(f => f
-                    .Term(t => t.Name, null)
-                )
-            )
-        )
-    );
-query.ShouldNotThrow();
 ----
 
