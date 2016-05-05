@@ -1,12 +1,6 @@
-:includes-from-dirs: query-dsl/compound,query-dsl/geo,query-dsl/joining,query-dsl/nest-specific,query-dsl/span,query-dsl/specialized,query-dsl/term-level
+:includes-from-dirs: query-dsl/compound,query-dsl/full-text,query-dsl/geo,query-dsl/joining,query-dsl/nest-specific,query-dsl/span,query-dsl/specialized,query-dsl/term-level
 
-////
-IMPORTANT NOTE
-==============
-This file has been generated from https://github.com/elastic/elasticsearch-net/tree/master/src/Tests/query-dsl-usage.asciidoc. 
-If you wish to submit a PR for any spelling mistakes, typos or grammatical errors for this file,
-please modify the original csharp file found at the link and submit the PR with that change. Thanks!
-////
+include::query-dsl/compound/and/and-query-usage.asciidoc[]
 
 include::query-dsl/compound/bool/bool-dsl-complex-query-usage.asciidoc[]
 
@@ -18,25 +12,33 @@ include::query-dsl/compound/constant-score/constant-score-query-usage.asciidoc[]
 
 include::query-dsl/compound/dismax/dismax-query-usage.asciidoc[]
 
-include::query-dsl/compound/full-text/common-terms/common-terms-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/match/match-phrase-prefix-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/match/match-phrase-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/match/match-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/multi-match/multi-match-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/query-string/query-string-usage.asciidoc[]
-
-include::query-dsl/compound/full-text/simple-query-string/simple-query-string-usage.asciidoc[]
+include::query-dsl/compound/filtered/filtered-query-usage.asciidoc[]
 
 include::query-dsl/compound/function-score/function-score-query-usage.asciidoc[]
 
 include::query-dsl/compound/indices/indices-no-match-query-usage.asciidoc[]
 
 include::query-dsl/compound/indices/indices-query-usage.asciidoc[]
+
+include::query-dsl/compound/limit/limit-query-usage.asciidoc[]
+
+include::query-dsl/compound/not/not-query-usage.asciidoc[]
+
+include::query-dsl/compound/or/or-query-usage.asciidoc[]
+
+include::query-dsl/full-text/common-terms/common-terms-usage.asciidoc[]
+
+include::query-dsl/full-text/match/match-phrase-prefix-usage.asciidoc[]
+
+include::query-dsl/full-text/match/match-phrase-usage.asciidoc[]
+
+include::query-dsl/full-text/match/match-usage.asciidoc[]
+
+include::query-dsl/full-text/multi-match/multi-match-usage.asciidoc[]
+
+include::query-dsl/full-text/query-string/query-string-usage.asciidoc[]
+
+include::query-dsl/full-text/simple-query-string/simple-query-string-usage.asciidoc[]
 
 include::query-dsl/geo/bounding-box/geo-bounding-box-query-usage.asciidoc[]
 
@@ -70,8 +72,6 @@ include::query-dsl/joining/has-parent/has-parent-query-usage.asciidoc[]
 
 include::query-dsl/joining/nested/nested-query-usage.asciidoc[]
 
-include::query-dsl/joining/parent-id/parent-id-usage.asciidoc[]
-
 include::query-dsl/nest-specific/raw/raw-combine-usage.asciidoc[]
 
 include::query-dsl/nest-specific/raw/raw-query-usage.asciidoc[]
@@ -95,8 +95,6 @@ include::query-dsl/span/term/span-term-query-usage.asciidoc[]
 include::query-dsl/span/within/span-within-query-usage.asciidoc[]
 
 include::query-dsl/specialized/more-like-this/more-like-this-query-usage.asciidoc[]
-
-include::query-dsl/specialized/percolate/percolate-query-usage.asciidoc[]
 
 include::query-dsl/specialized/script/script-query-usage.asciidoc[]
 

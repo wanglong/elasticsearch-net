@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 #if !DOTNETCORE
 using AsciiDocNet;
-using DocGenerator.AsciiDoc;
+using Nest.Litterateur.AsciiDoc;
 #endif
 
-namespace DocGenerator.Documentation.Files
+namespace Nest.Litterateur.Documentation.Files
 {
 	public class RawDocumentationFile : DocumentationFile
 	{
@@ -16,19 +16,23 @@ namespace DocGenerator.Documentation.Files
 		public override void SaveToDocumentationFolder()
 		{
 			//we simply do a copy of the markdown file
-			var destination = this.CreateDocumentationLocation();
+			var docFileName = this.CreateDocumentationLocation();
 
+#if !DOTNETCORE
 			var document = Document.Load(FileLocation.FullName);
 
 			// make any modifications
-			var rawVisitor = new RawAsciidocVisitor(FileLocation, destination);
+			var rawVisitor = new RawAsciidocVisitor(docFileName);
 			document.Accept(rawVisitor);
 
 			// write out asciidoc to file
-			using (var visitor = new AsciiDocVisitor(destination.FullName))
+			using (var visitor = new AsciiDocVisitor(docFileName.FullName))
 			{
 				document.Accept(visitor);
 			}
+#else
+			this.FileLocation.CopyTo(docFileName.FullName, true);
+#endif
 		}
 
 		protected override FileInfo CreateDocumentationLocation()
