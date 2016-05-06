@@ -9,12 +9,16 @@ using Elasticsearch.Net;
 using Nest;
 using Newtonsoft.Json;
 using Tests.Framework;
-using System.Buffers;
 using System.Text;
+using Tests.Framework.Benchmarks;
+
+#if !DNX
+using System.Buffers;
+#endif
 
 namespace Tests.Document.Multiple.Bulk
 {
-	public class BulkBenchmarkTests
+	public class BulkDeserializationBenchmarkTests : BenchmarkTestBase
 	{
 		private static readonly IElasticClient Client = TestClient.GetInMemoryClient();
 		private byte[] _tinyResponse;
@@ -78,6 +82,7 @@ namespace Tests.Document.Multiple.Bulk
 				return _jsonSerializer.Deserialize<BulkResponse>(reader);
 		}
 
+#if !DNX
 		[Benchmark(Description = "deserialize 100,000 items in bulk string response with array pool")]
 		public BulkResponse HugeResponseWithStringAndArrayPool()
 		{
@@ -87,6 +92,7 @@ namespace Tests.Document.Multiple.Bulk
 				return _jsonSerializer.Deserialize<BulkResponse>(reader);
 			}
 		}
+#endif
 
 		[Benchmark(Description = "Baseline", Baseline = true)]
 		public BulkResponse Baseline()
@@ -132,6 +138,7 @@ namespace Tests.Document.Multiple.Bulk
 			};
 		}
 
+#if !DNX
 		public class JsonArrayPool : IArrayPool<char>
 		{
 			public static readonly JsonArrayPool Instance = new JsonArrayPool();
@@ -148,5 +155,6 @@ namespace Tests.Document.Multiple.Bulk
 				ArrayPool<char>.Shared.Return(array);
 			}
 		}
+#endif
 	}
 }

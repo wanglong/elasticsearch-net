@@ -18,7 +18,7 @@ nuget DiffPlex
 nuget JetBrains.Profiler.Kernel.Windows.Api
 nuget Humanizer
 nuget NDesk.Options
-nuget BenchmarkDotNet prerelease
+nuget BenchmarkDotNet 0.9.5
 
 nuget System.Reactive
 nuget SemanticVersioning

@@ -14,6 +14,7 @@ using BenchmarkDotNet.Attributes;
 using Elasticsearch.Net;
 using Nest;
 using Tests.Framework;
+using Tests.Framework.Benchmarks;
 using Tests.Framework.MockData;
 
 namespace Tests.ClientConcepts.HighLevel.Caching
@@ -194,7 +195,7 @@ namespace Tests.ClientConcepts.HighLevel.Caching
 		}
 	}
 
-	public class FieldResolverBenchmarkTests
+	public class FieldResolverBenchmarkTests : BenchmarkTestBase
 	{
 		private FieldResolver _expressionResolver;
 		private FieldResolver _propertyResolver;
@@ -255,7 +256,7 @@ namespace Tests.ClientConcepts.HighLevel.Caching
 		}
 	}
 
-	public class PropertyNameResolverBenchmarkTests
+	public class PropertyNameResolverBenchmarkTests : BenchmarkTestBase
 	{
 		private FieldResolver _expressionResolver;
 		private FieldResolver _propertyResolver;
