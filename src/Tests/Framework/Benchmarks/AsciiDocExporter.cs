@@ -64,8 +64,7 @@ namespace Tests.Framework.Benchmarks
 			}
 
 			table.PrintCommonColumns(logger);
-			logger.Write("....");
-			logger.WriteLine();
+			logger.WriteLine("....");
 
 			logger.WriteLine("[options=\"header\"]");
 			logger.WriteLine("|===");

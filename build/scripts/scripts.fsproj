@@ -65,6 +65,7 @@
     <None Include="Releasing.fsx" />
     <None Include="Versioning.fsx" />
     <None Include="Profiling.fsx" />
+    <None Include="Benchmarking.fsx" />
     <None Include="InheritDoc.fsx" />
     <None Include="Building.fsx" />
     <None Include="Signing.fsx" />

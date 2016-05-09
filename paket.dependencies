@@ -16,8 +16,6 @@ nuget DiffPlex
 
 // profiling / benchmarking
 nuget JetBrains.Profiler.Kernel.Windows.Api
-nuget Humanizer
-nuget NDesk.Options
 nuget BenchmarkDotNet 0.9.5
 
 nuget System.Reactive
