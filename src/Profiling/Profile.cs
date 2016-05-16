@@ -16,17 +16,16 @@ namespace Profiling
                 Directory.CreateDirectory(resultsDirectory);
 
             ListFile = Path.Combine(resultsDirectory, "snapshot_list.xml");
-			using (File.Create(ListFile)) { }
 
-            if (ProfileProcesses.Any())
-            {
-                foreach (var profileProcess in ProfileProcesses)
-                {
-                    profileProcess.Kill();
-                }
+            //if (ProfileProcesses.Any())
+            //{
+            //    foreach (var profileProcess in ProfileProcesses)
+            //    {
+            //        profileProcess.Kill();
+            //    }
 
-                Thread.Sleep(1000);
-            }
+            //    Thread.Sleep(1000);
+            //}
         }
 
         protected string ListFile { get; }
@@ -42,7 +41,7 @@ namespace Profiling
         public virtual void Dispose()
         {
             // ensure running profiler process has chance to finish before starting next one
-            while (SelfAttach.State == SelfApiState.Active || IsActive || ProfileProcesses.Any())
+            while (SelfAttach.State == SelfApiState.Active || IsActive)
             {
                 Thread.Sleep(250);
             }

@@ -1,6 +1,6 @@
 using System;
 
-namespace Tests.Profiling
+namespace Tests.Framework.Profiling
 {
     [AttributeUsage(AttributeTargets.Method)]
     public abstract class ProfilingAttribute : Attribute

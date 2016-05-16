@@ -2,7 +2,7 @@ using System;
 using Elasticsearch.Net;
 using Nest;
 
-namespace Tests.Profiling
+namespace Tests.Framework.Profiling
 {
     public abstract class ProfileTests
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Nest;
 using Tests.Framework.Integration;
 using Tests.Framework.MockData;
-using Tests.Profiling;
+using Tests.Framework.Profiling;
 
 namespace Tests.Document.Multiple.Bulk
 {

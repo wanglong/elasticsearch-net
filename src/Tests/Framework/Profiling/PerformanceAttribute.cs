@@ -1,4 +1,4 @@
-namespace Tests.Profiling
+namespace Tests.Framework.Profiling
 {
     /// <summary>
     /// identifies a method that should be performance profiled

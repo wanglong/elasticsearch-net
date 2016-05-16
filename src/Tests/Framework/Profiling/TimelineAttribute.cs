@@ -1,5 +1,7 @@
-namespace Tests.Profiling
-{   
+using System;
+
+namespace Tests.Framework.Profiling
+{
     /// <summary>
     /// identifies a method that should be timeline profiled
     /// </summary>
