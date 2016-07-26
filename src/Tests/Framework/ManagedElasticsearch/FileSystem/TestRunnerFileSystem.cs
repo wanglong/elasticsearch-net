@@ -127,7 +127,8 @@ namespace Tests.Framework.Integration
 
 		private void InstallPlugins()
 		{
-			foreach (var plugin in ElasticsearchPluginCollection.Supported.Where(plugin => plugin.IsValid(this.Version)))
+			foreach (var plugin in ElasticsearchPluginCollection.Supported
+				.Where(plugin => plugin.IsValid(this.Version) && _config.RequiredPlugins.Contains(plugin.Plugin)))
 			{
 				var installParameter = plugin.InstallParamater(this.Version);
 				var folder = plugin.FolderName;

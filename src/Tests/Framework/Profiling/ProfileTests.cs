@@ -11,7 +11,7 @@ namespace Tests.Framework.Profiling
 		static ProfileTests()
 		{
 			var connectionPool = new SingleNodeConnectionPool(new Uri("http://localhost:9200"));
-			var connectionSettings = new ConnectionSettings(connectionPool, new InMemoryConnection());
+			var connectionSettings = new ConnectionSettings(connectionPool, new InMemoryConnection()).DefaultIndex("default");
 			InMemoryClient = new ElasticClient(connectionSettings);
 		}
 	}

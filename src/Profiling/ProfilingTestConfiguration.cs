@@ -7,7 +7,7 @@ namespace Profiling
 	{
 		public override bool RunIntegrationTests => true;
 
-		public override ElasticsearchVersion ElasticsearchVersion => new ElasticsearchVersion("2.3.1");
+		public override ElasticsearchVersion ElasticsearchVersion => new ElasticsearchVersion("5.0.0-alpha3");
 
 		public override bool TestAgainstAlreadyRunningElasticsearch { get; protected set; } = true;
 

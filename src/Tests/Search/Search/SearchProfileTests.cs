@@ -11,7 +11,7 @@ namespace Tests.Search.Search
 
         public SearchProfileTests(IIntegrationCluster cluster)
         {
-            _client = cluster.Client(s => s);
+            _client = cluster.Client();
         }
 
         [Timeline(1000)]
