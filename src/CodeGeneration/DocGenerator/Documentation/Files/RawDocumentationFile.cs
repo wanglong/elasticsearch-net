@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DocGenerator;
+using DocGenerator.AsciiDoc;
+using DocGenerator.Documentation.Files;
 #if !DOTNETCORE
 using AsciiDocNet;
 using Nest.Litterateur.AsciiDoc;
@@ -22,7 +25,7 @@ namespace Nest.Litterateur.Documentation.Files
 			var document = Document.Load(FileLocation.FullName);
 
 			// make any modifications
-			var rawVisitor = new RawAsciidocVisitor(docFileName);
+			var rawVisitor = new RawAsciidocVisitor(FileLocation, docFileName);
 			document.Accept(rawVisitor);
 
 			// write out asciidoc to file
