@@ -6,12 +6,11 @@ using System.Reflection;
 [assembly: AssemblyDescriptionAttribute("")]
 [assembly: AssemblyCompanyAttribute("Elasticsearch")]
 [assembly: AssemblyConfigurationAttribute("Release")]
-[assembly: AssemblyVersionAttribute("5.0.0")]
-[assembly: AssemblyFileVersionAttribute("5.0.0")]
-[assembly: AssemblyInformationalVersionAttribute("5.0.0-alpha3")]
+[assembly: AssemblyVersionAttribute("2.0.0")]
+[assembly: AssemblyFileVersionAttribute("2.3.1")]
+[assembly: AssemblyInformationalVersionAttribute("2.3.1")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "5.0.0";
-        internal const string InformationalVersion = "5.0.0-alpha3";
+        internal const string Version = "2.0.0";
     }
 }
