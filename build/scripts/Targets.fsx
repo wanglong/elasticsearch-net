@@ -34,8 +34,8 @@ Target "QuickTest"  <| fun _ -> Tests.RunUnitTests()
 Target "Integrate"  <| fun _ -> Tests.RunIntegrationTests() (getBuildParamOrDefault "esversions" "")
 
 Target "Profile" <| fun _ -> 
-    MsBuild.QuickCompile()
-    Profiler.Run()
+    Build.QuickCompile()
+    Profiler.Run() |> ignore
 
 Target "Benchmark" <| fun _ -> Benchmarker.Run()
 
