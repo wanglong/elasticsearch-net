@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IPutRoleResponse PutRole(IPutRoleRequest request);
 
 		/// <inheritdoc/>
-		Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null);
+		Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request);
+		Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IPutRoleResponse PutRole(IPutRoleRequest request) =>
 			this.Dispatcher.Dispatch<IPutRoleRequest, PutRoleRequestParameters, PutRoleResponse>(
 				request,
-				this.LowLevelDispatch.ShieldPutRoleDispatch<PutRoleResponse>
+				this.LowLevelDispatch.XpackSecurityPutRoleDispatch<PutRoleResponse>
 			);
 
 		/// <inheritdoc/>
-		public Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null) =>
+		public Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.PutRoleAsync(selector.InvokeOrDefault(new PutRoleDescriptor(role)));
 
 		/// <inheritdoc/>
-		public Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request) =>
+		public Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IPutRoleRequest, PutRoleRequestParameters, PutRoleResponse, IPutRoleResponse>(
 				request,
-				this.LowLevelDispatch.ShieldPutRoleDispatchAsync<PutRoleResponse>
+				cancellationToken,
+				this.LowLevelDispatch.XpackSecurityPutRoleDispatchAsync<PutRoleResponse>
 			);
 	}
 }

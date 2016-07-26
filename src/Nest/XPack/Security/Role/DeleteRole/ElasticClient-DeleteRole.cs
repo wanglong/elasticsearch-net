@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IDeleteRoleResponse DeleteRole(IDeleteRoleRequest request);
 
 		/// <inheritdoc/>
-		Task<IDeleteRoleResponse> DeleteRoleAsync(Name role, Func<DeleteRoleDescriptor, IDeleteRoleRequest> selector = null);
+		Task<IDeleteRoleResponse> DeleteRoleAsync(Name role, Func<DeleteRoleDescriptor, IDeleteRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IDeleteRoleResponse> DeleteRoleAsync(IDeleteRoleRequest request);
+		Task<IDeleteRoleResponse> DeleteRoleAsync(IDeleteRoleRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IDeleteRoleResponse DeleteRole(IDeleteRoleRequest request) =>
 			this.Dispatcher.Dispatch<IDeleteRoleRequest, DeleteRoleRequestParameters, DeleteRoleResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.ShieldDeleteRoleDispatch<DeleteRoleResponse>(p)
+				(p, d) =>this.LowLevelDispatch.XpackSecurityDeleteRoleDispatch<DeleteRoleResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IDeleteRoleResponse> DeleteRoleAsync(Name role, Func<DeleteRoleDescriptor, IDeleteRoleRequest> selector = null) =>
+		public Task<IDeleteRoleResponse> DeleteRoleAsync(Name role, Func<DeleteRoleDescriptor, IDeleteRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.DeleteRoleAsync(selector.InvokeOrDefault(new DeleteRoleDescriptor(role)));
 
 		/// <inheritdoc/>
-		public Task<IDeleteRoleResponse> DeleteRoleAsync(IDeleteRoleRequest request) =>
+		public Task<IDeleteRoleResponse> DeleteRoleAsync(IDeleteRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IDeleteRoleRequest, DeleteRoleRequestParameters, DeleteRoleResponse, IDeleteRoleResponse>(
 				request,
-				(p,d ) => this.LowLevelDispatch.ShieldDeleteRoleDispatchAsync<DeleteRoleResponse>(p)
+				cancellationToken,
+				(p,d,c) => this.LowLevelDispatch.XpackSecurityDeleteRoleDispatchAsync<DeleteRoleResponse>(p,c)
 			);
 	}
 }

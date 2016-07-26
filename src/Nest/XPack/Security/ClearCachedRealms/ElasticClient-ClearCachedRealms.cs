@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IClearCachedRealmsResponse ClearCachedRealms(IClearCachedRealmsRequest request);
 
 		/// <inheritdoc/>
-		Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(Names realms, Func<ClearCachedRealmsDescriptor, IClearCachedRealmsRequest> selector = null);
+		Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(Names realms, Func<ClearCachedRealmsDescriptor, IClearCachedRealmsRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(IClearCachedRealmsRequest request);
+		Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(IClearCachedRealmsRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IClearCachedRealmsResponse ClearCachedRealms(IClearCachedRealmsRequest request) =>
 			this.Dispatcher.Dispatch<IClearCachedRealmsRequest, ClearCachedRealmsRequestParameters, ClearCachedRealmsResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.ShieldClearCachedRealmsDispatch<ClearCachedRealmsResponse>(p)
+				(p, d) =>this.LowLevelDispatch.XpackSecurityClearCachedRealmsDispatch<ClearCachedRealmsResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(Names realms, Func<ClearCachedRealmsDescriptor, IClearCachedRealmsRequest> selector = null) =>
+		public Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(Names realms, Func<ClearCachedRealmsDescriptor, IClearCachedRealmsRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.ClearCachedRealmsAsync(selector.InvokeOrDefault(new ClearCachedRealmsDescriptor(realms)));
 
 		/// <inheritdoc/>
-		public Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(IClearCachedRealmsRequest request) =>
+		public Task<IClearCachedRealmsResponse> ClearCachedRealmsAsync(IClearCachedRealmsRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IClearCachedRealmsRequest, ClearCachedRealmsRequestParameters, ClearCachedRealmsResponse, IClearCachedRealmsResponse>(
 				request,
-				(p,d ) => this.LowLevelDispatch.ShieldClearCachedRealmsDispatchAsync<ClearCachedRealmsResponse>(p)
+				cancellationToken,
+				(p,d,c) => this.LowLevelDispatch.XpackSecurityClearCachedRealmsDispatchAsync<ClearCachedRealmsResponse>(p, c)
 			);
 	}
 }

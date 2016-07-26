@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IDeleteUserResponse DeleteUser(IDeleteUserRequest request);
 
 		/// <inheritdoc/>
-		Task<IDeleteUserResponse> DeleteUserAsync(Name username, Func<DeleteUserDescriptor, IDeleteUserRequest> selector = null);
+		Task<IDeleteUserResponse> DeleteUserAsync(Name username, Func<DeleteUserDescriptor, IDeleteUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IDeleteUserResponse> DeleteUserAsync(IDeleteUserRequest request);
+		Task<IDeleteUserResponse> DeleteUserAsync(IDeleteUserRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IDeleteUserResponse DeleteUser(IDeleteUserRequest request) =>
 			this.Dispatcher.Dispatch<IDeleteUserRequest, DeleteUserRequestParameters, DeleteUserResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.ShieldDeleteUserDispatch<DeleteUserResponse>(p)
+				(p, d) =>this.LowLevelDispatch.XpackSecurityDeleteUserDispatch<DeleteUserResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IDeleteUserResponse> DeleteUserAsync(Name username, Func<DeleteUserDescriptor, IDeleteUserRequest> selector = null) =>
+		public Task<IDeleteUserResponse> DeleteUserAsync(Name username, Func<DeleteUserDescriptor, IDeleteUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.DeleteUserAsync(selector.InvokeOrDefault(new DeleteUserDescriptor(username)));
 
 		/// <inheritdoc/>
-		public Task<IDeleteUserResponse> DeleteUserAsync(IDeleteUserRequest request) =>
+		public Task<IDeleteUserResponse> DeleteUserAsync(IDeleteUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IDeleteUserRequest, DeleteUserRequestParameters, DeleteUserResponse, IDeleteUserResponse>(
 				request,
-				(p,d ) => this.LowLevelDispatch.ShieldDeleteUserDispatchAsync<DeleteUserResponse>(p)
+				cancellationToken,
+				(p,d,c) => this.LowLevelDispatch.XpackSecurityDeleteUserDispatchAsync<DeleteUserResponse>(p,c)
 			);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IClearCachedRolesResponse ClearCachedRoles(IClearCachedRolesRequest request);
 
 		/// <inheritdoc/>
-		Task<IClearCachedRolesResponse> ClearCachedRolesAsync(Names roles, Func<ClearCachedRolesDescriptor, IClearCachedRolesRequest> selector = null);
+		Task<IClearCachedRolesResponse> ClearCachedRolesAsync(Names roles, Func<ClearCachedRolesDescriptor, IClearCachedRolesRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IClearCachedRolesResponse> ClearCachedRolesAsync(IClearCachedRolesRequest request);
+		Task<IClearCachedRolesResponse> ClearCachedRolesAsync(IClearCachedRolesRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IClearCachedRolesResponse ClearCachedRoles(IClearCachedRolesRequest request) =>
 			this.Dispatcher.Dispatch<IClearCachedRolesRequest, ClearCachedRolesRequestParameters, ClearCachedRolesResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.ShieldClearCachedRolesDispatch<ClearCachedRolesResponse>(p)
+				(p, d) =>this.LowLevelDispatch.XpackSecurityClearCachedRolesDispatch<ClearCachedRolesResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(Names roles, Func<ClearCachedRolesDescriptor, IClearCachedRolesRequest> selector = null) =>
+		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(Names roles, Func<ClearCachedRolesDescriptor, IClearCachedRolesRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.ClearCachedRolesAsync(selector.InvokeOrDefault(new ClearCachedRolesDescriptor(roles)));
 
 		/// <inheritdoc/>
-		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(IClearCachedRolesRequest request) =>
+		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(IClearCachedRolesRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IClearCachedRolesRequest, ClearCachedRolesRequestParameters, ClearCachedRolesResponse, IClearCachedRolesResponse>(
 				request,
-				(p,d ) => this.LowLevelDispatch.ShieldClearCachedRolesDispatchAsync<ClearCachedRolesResponse>(p)
+				cancellationToken,
+				(p,d,c) => this.LowLevelDispatch.XpackSecurityClearCachedRolesDispatchAsync<ClearCachedRolesResponse>(p, c)
 			);
 	}
 }

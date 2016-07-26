@@ -36,6 +36,7 @@ namespace ApiGenerator
 
 		private RestSpecDownloader(string branch)
 		{
+			branch = string.IsNullOrEmpty(branch) ? "master" : branch;
 			var specifications =
 				(from kv in OnlineSpecifications
 					let url = kv.Value.Replace("{version}", branch)

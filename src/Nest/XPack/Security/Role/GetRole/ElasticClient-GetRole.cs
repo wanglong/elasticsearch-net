@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IGetRoleResponse GetRole(IGetRoleRequest request);
 
 		/// <inheritdoc/>
-		Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null);
+		Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request);
+		Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IGetRoleResponse GetRole(IGetRoleRequest request) =>
 			this.Dispatcher.Dispatch<IGetRoleRequest, GetRoleRequestParameters, GetRoleResponse>(
 				request,
-				(p, d) =>this.LowLevelDispatch.ShieldGetRoleDispatch<GetRoleResponse>(p)
+				(p, d) =>this.LowLevelDispatch.XpackSecurityGetRoleDispatch<GetRoleResponse>(p)
 			);
 
 		/// <inheritdoc/>
-		public Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null) =>
+		public Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.GetRoleAsync(selector.InvokeOrDefault(new GetRoleDescriptor()));
 
 		/// <inheritdoc/>
-		public Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request) =>
+		public Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IGetRoleRequest, GetRoleRequestParameters, GetRoleResponse, IGetRoleResponse>(
 				request,
-				(p,d ) => this.LowLevelDispatch.ShieldGetRoleDispatchAsync<GetRoleResponse>(p)
+				cancellationToken,
+				(p,d,c) => this.LowLevelDispatch.XpackSecurityGetRoleDispatchAsync<GetRoleResponse>(p,c)
 			);
 	}
 }

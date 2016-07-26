@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 
@@ -13,10 +14,10 @@ namespace Nest
 		IPutUserResponse PutUser(IPutUserRequest request);
 
 		/// <inheritdoc/>
-		Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null);
+		Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <inheritdoc/>
-		Task<IPutUserResponse> PutUserAsync(IPutUserRequest request);
+		Task<IPutUserResponse> PutUserAsync(IPutUserRequest request, CancellationToken cancellationToken = default(CancellationToken));
 	}
 
 	public partial class ElasticClient
@@ -29,18 +30,19 @@ namespace Nest
 		public IPutUserResponse PutUser(IPutUserRequest request) =>
 			this.Dispatcher.Dispatch<IPutUserRequest, PutUserRequestParameters, PutUserResponse>(
 				request,
-				this.LowLevelDispatch.ShieldPutUserDispatch<PutUserResponse>
+				this.LowLevelDispatch.XpackSecurityPutUserDispatch<PutUserResponse>
 			);
 
 		/// <inheritdoc/>
-		public Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null) =>
+		public Task<IPutUserResponse> PutUserAsync(Name username, Func<PutUserDescriptor, IPutUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.PutUserAsync(selector.InvokeOrDefault(new PutUserDescriptor(username)));
 
 		/// <inheritdoc/>
-		public Task<IPutUserResponse> PutUserAsync(IPutUserRequest request) =>
+		public Task<IPutUserResponse> PutUserAsync(IPutUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IPutUserRequest, PutUserRequestParameters, PutUserResponse, IPutUserResponse>(
 				request,
-				this.LowLevelDispatch.ShieldPutUserDispatchAsync<PutUserResponse>
+				cancellationToken,
+				this.LowLevelDispatch.XpackSecurityPutUserDispatchAsync<PutUserResponse>
 			);
 	}
 }

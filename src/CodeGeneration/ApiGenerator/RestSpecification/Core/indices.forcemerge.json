@@ -1,10 +1,10 @@
 {
-  "indices.optimize": {
-    "documentation": "http://www.elastic.co/guide/en/elasticsearch/reference/master/indices-optimize.html",
-    "methods": ["POST", "GET"],
+  "indices.forcemerge": {
+    "documentation": "http://www.elastic.co/guide/en/elasticsearch/reference/master/indices-forcemerge.html",
+    "methods": ["POST"],
     "url": {
-      "path": "/_optimize",
-      "paths": ["/_optimize", "/{index}/_optimize"],
+      "path": "/_forcemerge",
+      "paths": ["/_forcemerge", "/{index}/_forcemerge"],
       "parts": {
         "index": {
           "type" : "list",

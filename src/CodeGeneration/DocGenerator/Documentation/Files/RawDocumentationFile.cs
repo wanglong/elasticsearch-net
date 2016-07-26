@@ -7,8 +7,8 @@ using DocGenerator.AsciiDoc;
 using DocGenerator.Documentation.Files;
 #if !DOTNETCORE
 using AsciiDocNet;
-using Nest.Litterateur.AsciiDoc;
 #endif
+using DocGenerator.Documentation.Files;
 
 namespace Nest.Litterateur.Documentation.Files
 {
