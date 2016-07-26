@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
 
 namespace Tests.Framework.Benchmarks
 {

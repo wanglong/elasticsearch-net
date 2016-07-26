@@ -16,7 +16,7 @@ nuget DiffPlex
 
 // profiling / benchmarking
 nuget JetBrains.Profiler.Kernel.Windows.Api
-nuget BenchmarkDotNet 0.9.5
+nuget BenchmarkDotNet 0.9.8
 
 nuget System.Reactive
 nuget SemanticVersioning
@@ -27,7 +27,7 @@ nuget AsciiDocNet
 
 source https://www.myget.org/F/aspnetvnext/api/v3/index.json
 
-nuget System.Buffers 4.0.0-rc2-24027
+nuget System.Buffers 4.0.0
 
 source https://www.myget.org/F/xunit/
 nuget xunit 2.2.0-beta3-build3330

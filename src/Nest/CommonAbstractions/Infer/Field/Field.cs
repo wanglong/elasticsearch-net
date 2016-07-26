@@ -21,7 +21,7 @@ namespace Nest
 
 		public double? Boost { get; set; }
 
-		public bool CachableExpression { get; }
+		public bool CacheableExpression { get; }
 
 		public Fields And<T>(Expression<Func<T, object>> field) where T : class =>
 			new Fields(new [] { this, field });
@@ -45,7 +45,7 @@ namespace Nest
 			Type type;
 			_comparisonValue = expression.ComparisonValueFromExpression(out type);
 			_type = type;
-			CachableExpression = !new HasConstantExpressionVisitor(expression).Found;
+			CacheableExpression = !new HasConstantExpressionVisitor(expression).Found;
 		}
 
 		public Field(PropertyInfo property, double? boost = null)

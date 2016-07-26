@@ -8,7 +8,7 @@ using BenchmarkDotNet.Attributes;
 namespace Tests.Framework.Benchmarks
 {
 	[Config(typeof(BenchmarkConfig))]
-    public abstract class BenchmarkTestBase
-    {
-    }
+	public abstract class BenchmarkTestBase
+	{
+	}
 }

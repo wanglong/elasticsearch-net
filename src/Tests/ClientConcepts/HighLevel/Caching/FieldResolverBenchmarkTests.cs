@@ -153,7 +153,7 @@ namespace Tests.ClientConcepts.HighLevel.Caching
 					var isDict =
 						typeof(IDictionary).IsAssignableFrom(t)
 						|| typeof(IDictionary<,>).IsAssignableFrom(t)
-						|| (t.IsGeneric() && t.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+						|| (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(IDictionary<,>));
 
 					if (!isDict)
 					{
