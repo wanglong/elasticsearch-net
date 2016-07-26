@@ -8,14 +8,14 @@ using JetBrains.Profiler.Windows.SelfApi;
 
 namespace Profiling
 {
-    internal abstract class Profile : IDisposable
-    {
-        protected Profile(string resultsDirectory)
-        {
-            if (!Directory.Exists(resultsDirectory))
-                Directory.CreateDirectory(resultsDirectory);
+	internal abstract class Profile : IDisposable
+	{
+		protected Profile(string resultsDirectory)
+		{
+			if (!Directory.Exists(resultsDirectory))
+				Directory.CreateDirectory(resultsDirectory);
 
-            ListFile = Path.Combine(resultsDirectory, "snapshot_list.xml");
+			ListFile = Path.Combine(resultsDirectory, "snapshot_list.xml");
 			using (File.Create(ListFile)) { }
 
 			if (ProfileProcesses.Any())
@@ -29,44 +29,44 @@ namespace Profiling
 			}
 		}
 
-        protected string ListFile { get; }
+		protected string ListFile { get; }
 
-        public abstract bool IsActive { get; }
+		public abstract bool IsActive { get; }
 
-        private IEnumerable<Process> ProfileProcesses =>
-            Process.GetProcessesByName("ExternalLauncherProfiler.x64").Concat(
-            Process.GetProcessesByName("ExternalLauncherProfiler.x86")).ToArray();
+		private IEnumerable<Process> ProfileProcesses =>
+			Process.GetProcessesByName("ExternalLauncherProfiler.x64").Concat(
+			Process.GetProcessesByName("ExternalLauncherProfiler.x86")).ToArray();
 
-        private static TimeSpan WaitTime => TimeSpan.FromSeconds(120);
+		private static TimeSpan WaitTime => TimeSpan.FromSeconds(120);
 
-        public virtual void Dispose()
-        {
-            // ensure running profiler process has chance to finish before starting next one
-            while (SelfAttach.State == SelfApiState.Active || IsActive || ProfileProcesses.Any())
-            {
-                Thread.Sleep(250);
-            }
-        }
+		public virtual void Dispose()
+		{
+			// ensure running profiler process has chance to finish before starting next one
+			while (SelfAttach.State == SelfApiState.Active || IsActive || ProfileProcesses.Any())
+			{
+				Thread.Sleep(250);
+			}
+		}
 
-        protected void WaitForProfilerToAttachToProcess()
-        {
-            var waitTime = TimeSpan.Zero;
+		protected void WaitForProfilerToAttachToProcess()
+		{
+			var waitTime = TimeSpan.Zero;
 
-            // give the profiler a chance to attach
-            while (SelfAttach.State != SelfApiState.Active)
-            {
-                var timeout = TimeSpan.FromMilliseconds(250);
-                Thread.Sleep(timeout);
+			// give the profiler a chance to attach
+			while (SelfAttach.State != SelfApiState.Active)
+			{
+				var timeout = TimeSpan.FromMilliseconds(250);
+				Thread.Sleep(timeout);
 
-                if (waitTime <= WaitTime)
-                {
-                    waitTime = waitTime.Add(timeout);
-                }
-                else
-                {
-                    throw new ApplicationException($"Could not attach profiler to process after {WaitTime}");
-                }
-            }
-        }
-    }
+				if (waitTime <= WaitTime)
+				{
+					waitTime = waitTime.Add(timeout);
+				}
+				else
+				{
+					throw new ApplicationException($"Could not attach profiler to process after {WaitTime}");
+				}
+			}
+		}
+	}
 }
