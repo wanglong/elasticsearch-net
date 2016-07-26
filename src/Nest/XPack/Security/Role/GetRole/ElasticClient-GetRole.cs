@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -35,14 +35,14 @@ namespace Nest
 
 		/// <inheritdoc/>
 		public Task<IGetRoleResponse> GetRoleAsync(Func<GetRoleDescriptor, IGetRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.GetRoleAsync(selector.InvokeOrDefault(new GetRoleDescriptor()));
+			this.GetRoleAsync(selector.InvokeOrDefault(new GetRoleDescriptor()), cancellationToken);
 
 		/// <inheritdoc/>
 		public Task<IGetRoleResponse> GetRoleAsync(IGetRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IGetRoleRequest, GetRoleRequestParameters, GetRoleResponse, IGetRoleResponse>(
 				request,
 				cancellationToken,
-				(p,d,c) => this.LowLevelDispatch.XpackSecurityGetRoleDispatchAsync<GetRoleResponse>(p,c)
+				(p, d, c) => this.LowLevelDispatch.XpackSecurityGetRoleDispatchAsync<GetRoleResponse>(p, c)
 			);
 	}
 }

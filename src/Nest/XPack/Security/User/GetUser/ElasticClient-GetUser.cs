@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -35,14 +35,14 @@ namespace Nest
 
 		/// <inheritdoc/>
 		public Task<IGetUserResponse> GetUserAsync(Func<GetUserDescriptor, IGetUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.GetUserAsync(selector.InvokeOrDefault(new GetUserDescriptor()));
+			this.GetUserAsync(selector.InvokeOrDefault(new GetUserDescriptor()), cancellationToken);
 
 		/// <inheritdoc/>
 		public Task<IGetUserResponse> GetUserAsync(IGetUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IGetUserRequest, GetUserRequestParameters, GetUserResponse, IGetUserResponse>(
 				request,
 				cancellationToken,
-				(p,d,c) => this.LowLevelDispatch.XpackSecurityGetUserDispatchAsync<GetUserResponse>(p,c)
+				(p, d, c) => this.LowLevelDispatch.XpackSecurityGetUserDispatchAsync<GetUserResponse>(p, c)
 			);
 	}
 }

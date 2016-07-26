@@ -2,7 +2,7 @@
 
 namespace Tests.Framework.Integration.Clusters
 {
-	[CollectionDefinition(IntegrationContext.Benchmark)]
+	[CollectionDefinition(TypeOfCluster.Benchmark)]
 	public class BenchmarkCluster : ClusterBase, ICollectionFixture<BenchmarkCluster>, IClassFixture<EndpointUsage>
 	{
 	}

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -35,7 +35,7 @@ namespace Nest
 
 		/// <inheritdoc/>
 		public Task<IPutRoleResponse> PutRoleAsync(Name role, Func<PutRoleDescriptor, IPutRoleRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.PutRoleAsync(selector.InvokeOrDefault(new PutRoleDescriptor(role)));
+			this.PutRoleAsync(selector.InvokeOrDefault(new PutRoleDescriptor(role)), cancellationToken);
 
 		/// <inheritdoc/>
 		public Task<IPutRoleResponse> PutRoleAsync(IPutRoleRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>

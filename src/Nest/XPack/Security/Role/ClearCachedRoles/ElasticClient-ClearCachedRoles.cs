@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -35,14 +35,14 @@ namespace Nest
 
 		/// <inheritdoc/>
 		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(Names roles, Func<ClearCachedRolesDescriptor, IClearCachedRolesRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.ClearCachedRolesAsync(selector.InvokeOrDefault(new ClearCachedRolesDescriptor(roles)));
+			this.ClearCachedRolesAsync(selector.InvokeOrDefault(new ClearCachedRolesDescriptor(roles)), cancellationToken);
 
 		/// <inheritdoc/>
 		public Task<IClearCachedRolesResponse> ClearCachedRolesAsync(IClearCachedRolesRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IClearCachedRolesRequest, ClearCachedRolesRequestParameters, ClearCachedRolesResponse, IClearCachedRolesResponse>(
 				request,
 				cancellationToken,
-				(p,d,c) => this.LowLevelDispatch.XpackSecurityClearCachedRolesDispatchAsync<ClearCachedRolesResponse>(p, c)
+				(p, d, c) => this.LowLevelDispatch.XpackSecurityClearCachedRolesDispatchAsync<ClearCachedRolesResponse>(p, c)
 			);
 	}
 }

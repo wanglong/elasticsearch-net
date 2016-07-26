@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -35,14 +35,14 @@ namespace Nest
 
 		/// <inheritdoc/>
 		public Task<IDeleteUserResponse> DeleteUserAsync(Name username, Func<DeleteUserDescriptor, IDeleteUserRequest> selector = null, CancellationToken cancellationToken = default(CancellationToken)) =>
-			this.DeleteUserAsync(selector.InvokeOrDefault(new DeleteUserDescriptor(username)));
+			this.DeleteUserAsync(selector.InvokeOrDefault(new DeleteUserDescriptor(username)), cancellationToken);
 
 		/// <inheritdoc/>
 		public Task<IDeleteUserResponse> DeleteUserAsync(IDeleteUserRequest request, CancellationToken cancellationToken = default(CancellationToken)) =>
 			this.Dispatcher.DispatchAsync<IDeleteUserRequest, DeleteUserRequestParameters, DeleteUserResponse, IDeleteUserResponse>(
 				request,
 				cancellationToken,
-				(p,d,c) => this.LowLevelDispatch.XpackSecurityDeleteUserDispatchAsync<DeleteUserResponse>(p,c)
+				(p, d, c) => this.LowLevelDispatch.XpackSecurityDeleteUserDispatchAsync<DeleteUserResponse>(p, c)
 			);
 	}
 }

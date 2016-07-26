@@ -8,8 +8,6 @@ namespace Nest
 	{
 		bool Auto { get;  }
 		int? EditDistance { get;  }
-
-		[Obsolete("Deprecated. Setting this is a noop")]
 		double? Ratio { get;  }
 	}
 }

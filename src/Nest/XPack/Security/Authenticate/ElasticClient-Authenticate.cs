@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using System.Threading;
 
 namespace Nest
 {
@@ -42,7 +42,7 @@ namespace Nest
 			this.Dispatcher.DispatchAsync<IAuthenticateRequest, AuthenticateRequestParameters, AuthenticateResponse, IAuthenticateResponse>(
 				request,
 				cancellationToken,
-				(p,d,c) => this.LowLevelDispatch.XpackSecurityAuthenticateDispatchAsync<AuthenticateResponse>(p, c)
+				(p, d, c) => this.LowLevelDispatch.XpackSecurityAuthenticateDispatchAsync<AuthenticateResponse>(p, c)
 			);
 	}
 }

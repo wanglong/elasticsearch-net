@@ -27,6 +27,7 @@ namespace Tests.QueryDsl.Specialized.Script
 			script = new
 			{
 				_name = "named_query",
+				boost = 1.1,
 				script = new
 				{
 					inline = "doc['numberOfCommits'].value > param1",
@@ -38,6 +39,7 @@ namespace Tests.QueryDsl.Specialized.Script
 		protected override QueryContainer QueryInitializer => new ScriptQuery
 		{
 			Name = "named_query",
+			Boost = 1.1,
 			Inline = _templateString,
 			Params = new Dictionary<string, object>
 			{
@@ -48,6 +50,7 @@ namespace Tests.QueryDsl.Specialized.Script
 		protected override QueryContainer QueryFluent(QueryContainerDescriptor<Project> q) => q
 			.Script(sn => sn
 				.Name("named_query")
+				.Boost(1.1)
 				.Inline(_templateString)
 				.Params(p=>p.Add("param1", 50))
 			);

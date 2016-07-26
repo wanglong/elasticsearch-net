@@ -5,6 +5,7 @@ namespace Nest
 {
 	internal class BulkResponseItemJsonConverter : JsonConverter
 	{
+		
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 			throw new NotSupportedException();

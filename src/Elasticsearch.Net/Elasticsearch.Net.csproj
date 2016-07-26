@@ -82,6 +82,7 @@
     <Compile Include="ElasticLowLevelClient.cs" />
     <Compile Include="ElasticLowLevelClient.Generated.cs" />
     <Compile Include="Exceptions\ElasticsearchClientException.cs" />
+    <Compile Include="Exceptions\ResolveException.cs" />
     <Compile Include="Exceptions\UnexpectedElasticsearchClientException.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\Fluent.cs" />
