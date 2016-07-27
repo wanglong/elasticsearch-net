@@ -5,6 +5,7 @@
 #load @"Building.fsx"
 #load @"Documentation.fsx"
 #load @"Releasing.fsx"
+#load @"Benchmarking.fsx"
 #load @"Profiling.fsx"
 
 open System
@@ -17,6 +18,7 @@ open Signing
 open Versioning
 open Releasing
 open Profiling
+open Benchmarking
 
 // Default target
 Target "Build" <| fun _ -> traceHeader "STARTING BUILD"

@@ -195,6 +195,7 @@ namespace Tests.ClientConcepts.HighLevel.Caching
 		}
 	}
 
+	[Config(typeof(FastRunConfig))]
 	public class FieldResolverBenchmarkTests : BenchmarkTestBase
 	{
 		private FieldResolver _expressionResolver;

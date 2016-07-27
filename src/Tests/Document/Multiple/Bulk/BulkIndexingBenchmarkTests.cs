@@ -65,16 +65,5 @@ namespace Tests.Document.Multiple.Bulk
 		}
 	}
 
-	public class FastRunConfig : ManualConfig
-	{
-		public FastRunConfig()
-		{
-			Add(new Job
-			{
-				LaunchCount = 1,
-				WarmupCount = 1,
-				TargetCount = 2
-			});
-		}
-	}
+
 }

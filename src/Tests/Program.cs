@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
-using BenchmarkDotNet.Running;
-using Tests.Document.Multiple.Bulk;
 using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Loggers;
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Helpers;
-using Tests.ClientConcepts.HighLevel.Caching;
+using BenchmarkDotNet.Running;
 using Tests.Framework;
 
 namespace Tests
@@ -21,16 +15,39 @@ namespace Tests
 	{
 		public static void Main(string[] args)
 		{
-			var benchmarks = typeof(Program).Assembly().GetTypes()
+			var benchmarkSwitcher = new BenchmarkSwitcher(GetBenchmarkTypes());
+			benchmarkSwitcher.Run(args);
+		}
+
+		private static Type[] GetBenchmarkTypes()
+		{
+			IEnumerable<Type> types;
+
+			try
+			{
+				types = typeof(Program).Assembly().GetTypes();
+			}
+			catch (ReflectionTypeLoadException e)
+			{
+				types = e.Types.Where(t => t != null);
+			}
+
+			return types
 				.Where(t => t.GetMethods(BindingFlags.Instance | BindingFlags.Public)
 							 .Any(m => m.GetCustomAttributes(typeof(BenchmarkAttribute), false).Any()))
 				.OrderBy(t => t.Namespace)
 				.ThenBy(t => t.Name)
 				.ToArray();
-			var benchmarkSwitcher = new BenchmarkSwitcher(benchmarks);
-			benchmarkSwitcher.Run(args);
 		}
+	}
 
-
+	public class FastRunConfig : ManualConfig
+	{
+		public FastRunConfig()
+		{
+			Add(Job.Dry.With(Runtime.Core).With(Jit.Host));
+			Add(Job.Dry.With(Runtime.Clr).With(Jit.Host));
+			Add(AsciiDocExporter.Default);
+		}
 	}
 }
