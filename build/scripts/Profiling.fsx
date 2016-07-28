@@ -34,6 +34,10 @@ module Profiler =
         Tooling.execProcessWithTimeout profiledApp [] (TimeSpan.FromMinutes 30.) |> ignore
 
         let performanceOutput = Paths.Output("profiling/performance") |> directoryInfo
+        let memoryOutput = Paths.Output("profiling/memory") |> directoryInfo
+
+        for snapshot in Directory.EnumerateFiles(memoryOutput.FullName, "*.dmrs.zip", SearchOption.AllDirectories) do
+            Rename (snapshot.Replace(".zip", "")) snapshot
 
         for snapshot in Directory.EnumerateFiles(performanceOutput.FullName, "*.dtp", SearchOption.AllDirectories) do
             let snapshotPath = snapshot |> fileInfo

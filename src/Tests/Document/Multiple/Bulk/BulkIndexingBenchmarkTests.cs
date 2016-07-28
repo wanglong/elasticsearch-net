@@ -12,6 +12,7 @@ using Tests.Framework;
 using Tests.Framework.Benchmarks;
 using Tests.Framework.Integration.Clusters;
 using Tests.Framework.MockData;
+using Tests.Framework.Profiling;
 
 namespace Tests.Document.Multiple.Bulk
 {
@@ -45,12 +46,15 @@ namespace Tests.Document.Multiple.Bulk
 		}
 
 		[Setup]
+		[ProfilingSetup]
 		public void Setup()
 		{
 			_messages = Message.Generator.Generate(250000).Partition(1000).ToList();
 		}
 
 		[Benchmark]
+		[Performance]
+		[Memory]
 		public void IndexMessages()
 		{
 			foreach (var messages in _messages)

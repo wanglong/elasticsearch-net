@@ -28,6 +28,8 @@ namespace Profiling
 			Output = output;
 		}
 
+		private string Name => this.GetType().Name.Replace("ProfileFactory", string.Empty);
+
 		protected Assembly Assembly { get; }
 
 		protected ClusterBase Cluster { get; }
@@ -49,11 +51,16 @@ namespace Profiling
 							.Any(m => m.GetCustomAttribute<TAttribute>() != null))
 						.Select(t =>
 						{
+							var setup = t.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+								.Where(m => m.GetCustomAttribute<ProfilingSetupAttribute>() != null)
+								.Select(m => new ProfiledMethod(m, m.GetCustomAttribute<ProfilingSetupAttribute>()))
+								.FirstOrDefault();
+
 							var methods = t.GetMethods(BindingFlags.Instance | BindingFlags.Public)
 								.Where(m => m.GetCustomAttribute<TAttribute>() != null)
 								.Select(m => new ProfiledMethod(m, m.GetCustomAttribute<TAttribute>()));
 
-							return new ProfiledClass(t, methods);
+							return new ProfiledClass(t, setup, methods);
 						});
 				}
 
@@ -69,12 +76,21 @@ namespace Profiling
 			{
 				var instance = profiledClass.CreateInstance(Cluster);
 
+				if (profiledClass.SetupMethod != null)
+				{
+					var setup = profiledClass.SetupMethod.Compile(instance);
+					Output.WriteLine(ConsoleColor.Green, $"Running setup for {profiledClass.Type.Name}");
+					setup();
+				}
+
 				foreach (var profiledMethod in profiledClass.Methods.Where(m => !m.IsAsync))
 				{
 					var resultsDirectory = Path.Combine(OutputPath, profiledClass.Type.Name, profiledMethod.MethodInfo.Name);
 					var action = profiledMethod.Compile(instance);
 
-					Output.WriteLine(ConsoleColor.Green, $"Profiling {profiledClass.Type.Name}.{profiledMethod.MethodInfo.Name}");
+					Output.WriteLine(
+						ConsoleColor.Green, 
+						$"{Name} profiling {profiledClass.Type.Name}.{profiledMethod.MethodInfo.Name}");
 
 					using (BeginProfiling(resultsDirectory))
 					{
@@ -89,16 +105,25 @@ namespace Profiling
 
 		public async Task RunAsync()
 		{
-			foreach (var profiledClass in ProfiledClasses)
+			foreach (var profiledClass in ProfiledClasses.Where(c => c.Methods.Any(m => m.IsAsync)))
 			{
 				var instance = profiledClass.CreateInstance(Cluster);
+
+				if (profiledClass.SetupMethod != null)
+				{
+					var setup = profiledClass.SetupMethod.Compile(instance);
+					Output.WriteLine(ConsoleColor.Green, $"Running setup for {profiledClass.Type.Name}");
+					setup();
+				}
 
 				foreach (var profiledMethod in profiledClass.Methods.Where(m => m.IsAsync))
 				{
 					var resultsDirectory = Path.Combine(OutputPath, profiledClass.Type.Name, profiledMethod.MethodInfo.Name);
 					var thunk = profiledMethod.CompileAsync(instance);
 
-					Output.WriteLine(ConsoleColor.Green, $"profiling {profiledClass.Type.Name}.{profiledMethod.MethodInfo.Name}");
+					Output.WriteLine(
+						ConsoleColor.Green, 
+						$"{Name} profiling {profiledClass.Type.Name}.{profiledMethod.MethodInfo.Name}");
 
 					using (BeginProfiling(resultsDirectory))
 					{

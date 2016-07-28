@@ -11,12 +11,15 @@ namespace Profiling
 
 		public Type Type { get; set; }
 
+		public ProfiledMethod SetupMethod { get; set; }
+
 		public IEnumerable<ProfiledMethod> Methods { get; set; }
 
-		public ProfiledClass(Type type, IEnumerable<ProfiledMethod> methods)
+		public ProfiledClass(Type type, ProfiledMethod setupMethod, IEnumerable<ProfiledMethod> methods)
 		{
 			Type = type;
 			Methods = methods;
+			SetupMethod = setupMethod;
 		}
 
 		public object CreateInstance(ClusterBase cluster)
