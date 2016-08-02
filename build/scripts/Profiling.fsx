@@ -1,4 +1,8 @@
 ﻿#I @"../../packages/build/FAKE/tools"
+#r "../../packages/build/FSharp.Data/lib/net40/FSharp.Data.dll"
+#r "../../packages/build/NEST/lib/net45/NEST.dll"
+#r "../../packages/build/Elasticsearch.Net/lib/net45/Elasticsearch.Net.dll"
+#r "../../packages/build/Newtonsoft.Json/lib/net45/Newtonsoft.Json.dll"
 #r @"FakeLib.dll"
 #r @"System.Xml.Linq.dll"
 
@@ -11,11 +15,34 @@ open System.Xml
 open System.Xml.Serialization
 open System.Xml.Linq
 
+open FSharp.Data
+
 open Fake
+open Git.Branches
+open Nest
+open Elasticsearch.Net
+open Newtonsoft.Json
 
 open Paths
 
 module Profiler =
+
+    type Profile = XmlProvider<"../../build/profiling/profile-example.xml">
+
+    type Function(id:string, fqn:string, totalTime:int, ownTime:int, calls:int, instances:int) =
+        member val Id = id with get, set
+        member val Fqn = fqn with get, set
+        member val TotalTime = totalTime with get, set
+        member val OwnTime = ownTime with get, set
+        member val Calls = calls with get, set
+        member val Instances = instances with get, set
+    
+    type Report(name:string, date:DateTime, commit:string, functions:Function list) = 
+        member val Name = name with get, set
+        member val Date = date with get, set
+        member val Commit = commit with get, set
+        member val Functions = functions with get, set
+
     let private project = "Profiling"
     let private profiledApp = sprintf "%s/bin/Release/net45/%s.exe" (Paths.Source(project)) project
     let private snapShotOutput = Paths.Output("ProfilingSnapshot.dtp")
@@ -31,11 +58,15 @@ module Profiler =
 
     let Run() = 
         Tooling.MsBuild.Exec "Rebuild" Tooling.DotNetFramework.Net45.Identifier [Paths.CsProj(project)]
+        
+        let date = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffz")
         Tooling.execProcessWithTimeout profiledApp [] (TimeSpan.FromMinutes 30.) |> ignore
 
         let performanceOutput = Paths.Output("profiling/performance") |> directoryInfo
         let memoryOutput = Paths.Output("profiling/memory") |> directoryInfo
 
+        // DotMemory has a bug whereby it needs to open the dmrs zips, but is restricted to only open *.dmrs files.
+        // In this case, we simply remove the zip extension
         for snapshot in Directory.EnumerateFiles(memoryOutput.FullName, "*.dmrs.zip", SearchOption.AllDirectories) do
             Rename (snapshot.Replace(".zip", "")) snapshot
 
@@ -53,7 +84,10 @@ module Profiler =
 
             let report = XDocument.Load snapshotReport
             let reportElem = report.Element(XName.Get "Report")
+            let commit = getSHA1 "." "HEAD"
             reportElem.Add (attribute "Name" snapShotName)
+            reportElem.Add (attribute "Date" date)
+            reportElem.Add (attribute "Commit" commit)
             report.Save snapshotReport
 
             if fileExists profileOutput = false then
@@ -65,15 +99,48 @@ module Profiler =
                 let reportsElem = reports.Element(XName.Get "Reports")
                 reportsElem.Add reportElem
                 reports.Save profileOutput
-    
-module Benchmarker =
-   let private benchmarkingApp = sprintf "%s/%s" (Paths.BinFolder("Benchmarking")) "Benchmarking.exe" 
 
-   let private failure errors =
-        raise (BuildException("The project benchmarking failed.", errors |> List.ofSeq))
+    let IndexResults url =
+        if (String.IsNullOrEmpty url = false) && (fileExists profileOutput) then
+            trace "Indexing profile results into Elasticsearch"
+            let client = new ElasticClient()
+            use file = File.OpenRead profileOutput
+            let profile = Profile.Load file
+            
+            for report in profile.Reports do
+                let functions = report.Functions
+                                |> Seq.map(fun f -> 
+                                    new Function(f.Id, f.Fqn, f.TotalTime, f.OwnTime, f.Calls, f.Instances))
+                                |> Seq.toList
 
-   let Run() =
-        !! Paths.Source("Benchmarking/project.json") 
-        |> Seq.map DirectoryName
-        |> Seq.iter(fun project -> 
-                Tooling.DotNet.Exec ["--project"; project; "run"; "-i false"; "-t 5"])
+                let reportDoc = new Report(report.Name, report.Date, report.Commit, functions)
+
+                let indexName = IndexName.op_Implicit("reports")
+                let typeName = TypeName.op_Implicit("report")
+                let indexExists = client.IndexExists(Indices.op_Implicit(indexName)).Exists
+
+                if indexExists = false then
+                    let createIndex = client.CreateIndex(indexName, fun c -> 
+                        c.Mappings(fun m -> 
+                                m.Map<Report>(fun mm ->
+                                    mm.AutoMap()
+                                      .Properties(fun p -> 
+                                          p.Nested<Function>(fun n ->
+                                              n.AutoMap().Name(PropertyName.op_Implicit("functions")) :> INestedProperty
+                                          ) :> IPromise<IProperties>
+                                      ) :> ITypeMapping
+                                ) :> IPromise<IMappings>
+                            ) :> ICreateIndexRequest
+                        )
+
+                    if createIndex.IsValid = false then
+                        raise (Exception("Unable to create index into Elasticsearch"))
+
+
+                let indexRequest = new IndexRequest<Report>(indexName, typeName)
+                indexRequest.Document <- reportDoc
+
+                let indexResponse = client.Index(indexRequest)
+
+                if indexResponse.IsValid = false then
+                    raise (Exception("Unable to index report into Elasticsearch"))
