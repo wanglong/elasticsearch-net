@@ -59,7 +59,7 @@ namespace ApiGenerator.Domain
 			};
 		}
 
-		private string MetricPrefix => this.RequestType.Replace("Request", "");
+		public string MetricPrefix => this.RequestType.Replace("Request", "");
 		private string ClrParamType(string clrType) => clrType.EndsWith("Metrics", StringComparison.OrdinalIgnoreCase)
 			? this.MetricPrefix + clrType.Replace("Metrics", "Metric") : clrType;
 

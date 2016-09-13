@@ -29,6 +29,15 @@ namespace ApiGenerator.Domain
 										  Options = m.Value.Options
 
 									  };
+				//var queryParamEnums = from m in this.CsharpMethodsWithQueryStringInfo
+				//					  from u in m.Url.Params.Where(p => p.Value.Type == "enum")
+				//					  select new EnumDescription
+				//					  {
+				//						  Name = u.Key.Contains("metric")
+				//							? m.MetricPrefix + u.Value.CsharpType(u.Key)
+				//							: u.Value.CsharpType(u.Key),
+				//						  Options = u.Value.Options
+				//					  };
 
 				var urlParamEnums = from data in this.Endpoints.Values
 					.SelectMany(v => v.CsharpMethods.Select(m => new { m, n = v.CsharpMethodName }))

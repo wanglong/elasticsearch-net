@@ -20,7 +20,7 @@ namespace ApiGenerator.Domain
 			{
 				var methodArgs = CsharpMethod.Parts
 					.Select(p => p.Name != "body" ? "p.RouteValues." + p.Name.ToPascalCase() : "body")
-					.Concat(new[] {"u => p.RequestParameters"});
+					.Concat(new[] { "u => p.RequestParameters" });
 				return methodArgs;
 			}
 		}
@@ -59,7 +59,7 @@ namespace ApiGenerator.Domain
 			//we distinct by here to catch aliased endpoints like:
 			//  /_cluster/nodes/hotthreads and /_nodes/hotthreads
 			return this.CsharpMethods.ToList()
-				.Where(m=>m.CallTypeGeneric != "DynamicDictionary" && m.CallTypeGeneric != "string")
+				.Where(m => m.CallTypeGeneric != "DynamicDictionary" && m.CallTypeGeneric != "string")
 				.DistinctBy(m => m.ReturnType + "--" + m.FullName + "--" + m.Arguments
 			);
 		}
@@ -87,7 +87,7 @@ namespace ApiGenerator.Domain
 		{
 			if (availableMethods.Count() == 1)
 				return string.Empty;
-			if (availableMethods.Count() == 2  && availableMethods.Contains("GET"))
+			if (availableMethods.Count() == 2 && availableMethods.Contains("GET"))
 			{
 				//if on operation has two endpoints and one of them is GET always favor the other as default
 				return currentHttpMethod == "GET" ? "Get" : string.Empty;
@@ -125,15 +125,11 @@ namespace ApiGenerator.Domain
 								case "string":
 									return p.Type + " " + p.Name;
 								case "list":
-									return "string " + p.Name;
-								case "enum":
-									return this.PascalCase(p.Name) + p.Name;
 								case "number":
+								case "enum":
 									return "string " + p.Name;
 								default:
 									return p.Type + " " + p.Name;
-									//return "string " + p.Name;
-
 							}
 						});
 

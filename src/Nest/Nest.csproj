@@ -415,6 +415,7 @@
     <Compile Include="CommonAbstractions\Infer\Field\FieldExtensions.cs" />
     <Compile Include="CommonAbstractions\Infer\Field\FieldJsonConverter.cs" />
     <Compile Include="CommonAbstractions\Infer\Field\FieldResolver.cs" />
+    <Compile Include="CommonAbstractions\Infer\Ids\Ids.cs" />
     <Compile Include="CommonAbstractions\Infer\Id\Id.cs" />
     <Compile Include="CommonAbstractions\Infer\Id\IdExtensions.cs" />
     <Compile Include="CommonAbstractions\Infer\Id\IdJsonConverter.cs" />

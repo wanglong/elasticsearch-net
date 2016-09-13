@@ -30,6 +30,8 @@ namespace Nest
 		public string Target => GetResolved("target");
 		public string NewIndex => GetResolved("new_index");
 		public string Alias => GetResolved("alias");
+		public string ActionId => GetResolved("action_id");
+		public string WatchId => GetResolved("watch_id");
 
 		private string GetResolved(string route)
 		{

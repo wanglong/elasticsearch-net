@@ -77,6 +77,7 @@
     <Compile Include="Overrides\Descriptors\SearchDescriptorOverrides.cs" />
     <Compile Include="Overrides\Descriptors\ReindexOnServerDescriptorOverrides.cs" />
     <Compile Include="Overrides\Descriptors\UpdateDescriptorOverrides.cs" />
+    <Compile Include="Overrides\Descriptors\XpackWatcherStatsDescriptorOverrides.cs" />
     <Compile Include="Overrides\Global\GlobalQueryParameters.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,7 +131,6 @@
     <None Include="RestSpecification\Core\indices.delete.json" />
     <None Include="RestSpecification\Core\indices.delete_alias.json" />
     <None Include="RestSpecification\Core\indices.delete_template.json" />
-    <None Include="RestSpecification\Core\indices.delete_warmer.json" />
     <None Include="RestSpecification\Core\indices.exists.json" />
     <None Include="RestSpecification\Core\indices.exists_alias.json" />
     <None Include="RestSpecification\Core\indices.exists_template.json" />
@@ -140,20 +140,16 @@
     <None Include="RestSpecification\Core\indices.forcemerge.json" />
     <None Include="RestSpecification\Core\indices.get.json" />
     <None Include="RestSpecification\Core\indices.get_alias.json" />
-    <None Include="RestSpecification\Core\indices.get_aliases.json" />
     <None Include="RestSpecification\Core\indices.get_field_mapping.json" />
     <None Include="RestSpecification\Core\indices.get_mapping.json" />
     <None Include="RestSpecification\Core\indices.get_settings.json" />
     <None Include="RestSpecification\Core\indices.get_template.json" />
     <None Include="RestSpecification\Core\indices.get_upgrade.json" />
-    <None Include="RestSpecification\Core\indices.get_warmer.json" />
     <None Include="RestSpecification\Core\indices.open.json" />
-    <None Include="RestSpecification\Core\indices.optimize.json" />
     <None Include="RestSpecification\Core\indices.put_alias.json" />
     <None Include="RestSpecification\Core\indices.put_mapping.json" />
     <None Include="RestSpecification\Core\indices.put_settings.json" />
     <None Include="RestSpecification\Core\indices.put_template.json" />
-    <None Include="RestSpecification\Core\indices.put_warmer.json" />
     <None Include="RestSpecification\Core\indices.recovery.json" />
     <None Include="RestSpecification\Core\indices.refresh.json" />
     <None Include="RestSpecification\Core\indices.segments.json" />
@@ -178,7 +174,6 @@
     <None Include="RestSpecification\Core\render_search_template.json" />
     <None Include="RestSpecification\Core\scroll.json" />
     <None Include="RestSpecification\Core\search.json" />
-    <None Include="RestSpecification\Core\search_exists.json" />
     <None Include="RestSpecification\Core\search_shards.json" />
     <None Include="RestSpecification\Core\search_template.json" />
     <None Include="RestSpecification\Core\snapshot.create.json" />

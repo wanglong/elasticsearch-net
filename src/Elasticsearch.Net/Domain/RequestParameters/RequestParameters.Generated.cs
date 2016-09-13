@@ -5085,4 +5085,234 @@ namespace Elasticsearch.Net
 		public PutUserRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
 		
 	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherAckWatch
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-ack-watch.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherAckWatchRequestParameters : FluentRequestParameters<XpackWatcherAckWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.PUT;
+		
+		///<summary>Specify timeout for watch write operation</summary>
+		public XpackWatcherAckWatchRequestParameters MasterTimeout(TimeSpan master_timeout) => this.AddQueryString("master_timeout", master_timeout.ToTimeUnit());
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherAckWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherAckWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherActivateWatch
+	///<pre>
+	///https://www.elastic.co/guide/en/watcher/current/api-rest.html#api-rest-activate-watch
+	///</pre>
+	///</summary>
+	public class XpackWatcherActivateWatchRequestParameters : FluentRequestParameters<XpackWatcherActivateWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.PUT;
+		
+		///<summary>Specify timeout for watch write operation</summary>
+		public XpackWatcherActivateWatchRequestParameters MasterTimeout(TimeSpan master_timeout) => this.AddQueryString("master_timeout", master_timeout.ToTimeUnit());
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherActivateWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherActivateWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherDeactivateWatch
+	///<pre>
+	///https://www.elastic.co/guide/en/watcher/current/api-rest.html#api-rest-deactivate-watch
+	///</pre>
+	///</summary>
+	public class XpackWatcherDeactivateWatchRequestParameters : FluentRequestParameters<XpackWatcherDeactivateWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.PUT;
+		
+		///<summary>Specify timeout for watch write operation</summary>
+		public XpackWatcherDeactivateWatchRequestParameters MasterTimeout(TimeSpan master_timeout) => this.AddQueryString("master_timeout", master_timeout.ToTimeUnit());
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherDeactivateWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherDeactivateWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherDeleteWatch
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-delete-watch.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherDeleteWatchRequestParameters : FluentRequestParameters<XpackWatcherDeleteWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.DELETE;
+		
+		///<summary>Specify timeout for watch write operation</summary>
+		public XpackWatcherDeleteWatchRequestParameters MasterTimeout(TimeSpan master_timeout) => this.AddQueryString("master_timeout", master_timeout.ToTimeUnit());
+		
+		
+		///<summary>Specify if this request should be forced and ignore locks</summary>
+		public XpackWatcherDeleteWatchRequestParameters Force(bool force) => this.AddQueryString("force", force);
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherDeleteWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherDeleteWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherExecuteWatch
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-execute-watch.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherExecuteWatchRequestParameters : FluentRequestParameters<XpackWatcherExecuteWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.PUT;
+		
+		///<summary>indicates whether the watch should execute in debug mode</summary>
+		public XpackWatcherExecuteWatchRequestParameters Debug(bool debug) => this.AddQueryString("debug", debug);
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherExecuteWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherExecuteWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherGetWatch
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-get-watch.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherGetWatchRequestParameters : FluentRequestParameters<XpackWatcherGetWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.GET;
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherGetWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherGetWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherPutWatch
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-put-watch.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherPutWatchRequestParameters : FluentRequestParameters<XpackWatcherPutWatchRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.PUT;
+		
+		///<summary>Specify timeout for watch write operation</summary>
+		public XpackWatcherPutWatchRequestParameters MasterTimeout(TimeSpan master_timeout) => this.AddQueryString("master_timeout", master_timeout.ToTimeUnit());
+		
+		
+		///<summary>Specify whether the watch is in/active by default</summary>
+		public XpackWatcherPutWatchRequestParameters Active(bool active) => this.AddQueryString("active", active);
+		
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherPutWatchRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherPutWatchRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherRestart
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherRestartRequestParameters : FluentRequestParameters<XpackWatcherRestartRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.POST;
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherRestartRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherRestartRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherStart
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherStartRequestParameters : FluentRequestParameters<XpackWatcherStartRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.POST;
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherStartRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherStartRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherStats
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-stats.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherStatsRequestParameters : FluentRequestParameters<XpackWatcherStatsRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.GET;
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherStatsRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherStatsRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
+	
+	///<summary>Request parameters descriptor for XpackWatcherStop
+	///<pre>
+	///http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html
+	///</pre>
+	///</summary>
+	public class XpackWatcherStopRequestParameters : FluentRequestParameters<XpackWatcherStopRequestParameters> 
+	{
+		public override HttpMethod DefaultHttpMethod => HttpMethod.POST;
+		
+		///<summary>The URL-encoded request definition</summary>
+		public XpackWatcherStopRequestParameters Source(string source) => this.AddQueryString("source", source);
+		
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public XpackWatcherStopRequestParameters FilterPath(string filter_path) => this.AddQueryString("filter_path", filter_path);
+		
+	}
 }

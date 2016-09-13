@@ -9,13 +9,15 @@ namespace Nest
 
 		public string GetString(IConnectionConfigurationValues settings) => KnownEnums.Resolve(this._enumValue);
 		internal Metrics(IndicesStatsMetric metric) { _enumValue = metric; }
-		internal Metrics(NodesStatsMetric metric){ _enumValue = metric; }
-		internal Metrics(NodesInfoMetric metric){ _enumValue = metric; }
-		internal Metrics(ClusterStateMetric metric){ _enumValue = metric; }
+		internal Metrics(NodesStatsMetric metric) { _enumValue = metric; }
+		internal Metrics(NodesInfoMetric metric) { _enumValue = metric; }
+		internal Metrics(ClusterStateMetric metric) { _enumValue = metric; }
+		internal Metrics(XpackWatcherStatsMetric metric) { _enumValue = metric; }
 
 		public static implicit operator Metrics(IndicesStatsMetric metric) => new Metrics(metric);
 		public static implicit operator Metrics(NodesStatsMetric metric) => new Metrics(metric);
 		public static implicit operator Metrics(NodesInfoMetric metric) => new Metrics(metric);
 		public static implicit operator Metrics(ClusterStateMetric metric) => new Metrics(metric);
+		public static implicit operator Metrics(XpackWatcherStatsMetric metric) => new Metrics(metric);
 	}
 }

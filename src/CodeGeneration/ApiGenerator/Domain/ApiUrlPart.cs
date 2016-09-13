@@ -34,15 +34,25 @@ namespace ApiGenerator.Domain
 						return this.Type == "string" ? "IndexName" : "Indices";
 					case "target":
 						return "IndexName";
-					case "type": return this.Type == "string" ? "TypeName" : "Types";
-					case "id": return this.Type == "string" ? "Id" : "Ids";
-					case "node_id": return this.Type == "string" ? "NodeId" : "NodeIds";
-					case "scroll_id": return this.Type == "string" ? "ScrollId" : "ScrollIds";
+					case "type":
+						return this.Type == "string" ? "TypeName" : "Types";
+					case "id":
+					case "watch_id":
+					case "action_id":
+						return this.Type == "string" ? "Id" : "Ids";
+					case "node_id":
+						return this.Type == "string" ? "NodeId" : "NodeIds";
+					case "scroll_id":
+						return this.Type == "string" ? "ScrollId" : "ScrollIds";
 					case "field":
-					case "fields": return this.Type == "string" ? "Field" : "Fields";
-					case "index_metric": return "IndexMetrics";
-					case "metric": return "Metrics";
-					case "feature": return "Features";
+					case "fields":
+						return this.Type == "string" ? "Field" : "Fields";
+					case "index_metric":
+						return "IndexMetrics";
+					case "metric":
+						return "Metrics";
+					case "feature":
+						return "Features";
 					case "repository":
 					case "snapshot":
 					case "lang":
@@ -53,7 +63,8 @@ namespace ApiGenerator.Domain
 					case "alias":
 					case "name":
 						return this.Type == "string" ? "Name" : "Names";
-					case "task_id": return "TaskId";
+					case "task_id":
+						return "TaskId";
 					default: return this.Type + "_";
 				}
 			}

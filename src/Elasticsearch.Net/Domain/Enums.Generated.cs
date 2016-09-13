@@ -373,6 +373,17 @@ namespace Elasticsearch.Net
 		All = 1 << 16
 	}
 	
+	
+	[Flags]public enum XpackWatcherStatsMetric 
+	{
+		[EnumMember(Value = "queued_watches")]
+		QueuedWatches = 1 << 0,
+		[EnumMember(Value = "pending_watches")]
+		PendingWatches = 1 << 1,
+		[EnumMember(Value = "_all")]
+		All = 1 << 2
+	}
+	
 
 	public static class KnownEnums
 	{
@@ -677,6 +688,16 @@ namespace Elasticsearch.Net
 				if (e.HasFlag(NodesStatsIndexMetric.Warmer)) list.Add("warmer");
 				if (e.HasFlag(NodesStatsIndexMetric.Suggest)) list.Add("suggest");
 				if (e.HasFlag(NodesStatsIndexMetric.All)) return "_all";
+				return string.Join(",", list);
+			
+			}
+			
+			if (e is XpackWatcherStatsMetric)
+			{ 
+				var list = new List<string>();
+				if (e.HasFlag(XpackWatcherStatsMetric.QueuedWatches)) list.Add("queued_watches");
+				if (e.HasFlag(XpackWatcherStatsMetric.PendingWatches)) list.Add("pending_watches");
+				if (e.HasFlag(XpackWatcherStatsMetric.All)) return "_all";
 				return string.Join(",", list);
 			
 			}

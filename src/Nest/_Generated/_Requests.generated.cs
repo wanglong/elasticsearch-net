@@ -6419,5 +6419,299 @@ namespace Nest
 		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
 		
 		}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherAckWatchRequest : IRequest<XpackWatcherAckWatchRequestParameters> 
+	{
+		Id WatchId { get; }
+		Ids ActionId { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherAckWatch <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-ack-watch.html</pre></summary>
+	public partial class XpackWatcherAckWatchRequest  : PlainRequestBase<XpackWatcherAckWatchRequestParameters>, IXpackWatcherAckWatchRequest
+	{
+		protected IXpackWatcherAckWatchRequest Self => this;
+		Id IXpackWatcherAckWatchRequest.WatchId => Self.RouteValues.Get<Id>("watch_id");
+		Ids IXpackWatcherAckWatchRequest.ActionId => Self.RouteValues.Get<Ids>("action_id");
+			/// <summary>/_xpack/watcher/watch/{watch_id}/_ack</summary>
+///<param name="watch_id">this parameter is required</param>
+		public XpackWatcherAckWatchRequest(Id watch_id) : base(r=>r.Required("watch_id", watch_id)){}
+		
+
+		/// <summary>/_xpack/watcher/watch/{watch_id}/_ack/{action_id}</summary>
+///<param name="watch_id">this parameter is required</param>		
+///<param name="action_id">Optional, accepts null</param>
+		public XpackWatcherAckWatchRequest(Id watch_id, Ids action_id) : base(r=>r.Required("watch_id", watch_id).Optional("action_id", action_id)){}
+		
+
+			///<summary>Specify timeout for watch write operation</summary>
+		public Time MasterTimeout { get { return Q<Time>("master_timeout"); } set { Q("master_timeout", value.ToString()); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherActivateWatchRequest : IRequest<XpackWatcherActivateWatchRequestParameters> 
+	{
+		Id WatchId { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherActivateWatch <pre>https://www.elastic.co/guide/en/watcher/current/api-rest.html#api-rest-activate-watch</pre></summary>
+	public partial class XpackWatcherActivateWatchRequest  : PlainRequestBase<XpackWatcherActivateWatchRequestParameters>, IXpackWatcherActivateWatchRequest
+	{
+		protected IXpackWatcherActivateWatchRequest Self => this;
+		Id IXpackWatcherActivateWatchRequest.WatchId => Self.RouteValues.Get<Id>("watch_id");
+			/// <summary>/_xpack/watcher/watch/{watch_id}/_activate</summary>
+///<param name="watch_id">this parameter is required</param>
+		public XpackWatcherActivateWatchRequest(Id watch_id) : base(r=>r.Required("watch_id", watch_id)){}
+		
+
+			///<summary>Specify timeout for watch write operation</summary>
+		public Time MasterTimeout { get { return Q<Time>("master_timeout"); } set { Q("master_timeout", value.ToString()); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherDeactivateWatchRequest : IRequest<XpackWatcherDeactivateWatchRequestParameters> 
+	{
+		Id WatchId { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherDeactivateWatch <pre>https://www.elastic.co/guide/en/watcher/current/api-rest.html#api-rest-deactivate-watch</pre></summary>
+	public partial class XpackWatcherDeactivateWatchRequest  : PlainRequestBase<XpackWatcherDeactivateWatchRequestParameters>, IXpackWatcherDeactivateWatchRequest
+	{
+		protected IXpackWatcherDeactivateWatchRequest Self => this;
+		Id IXpackWatcherDeactivateWatchRequest.WatchId => Self.RouteValues.Get<Id>("watch_id");
+			/// <summary>/_xpack/watcher/watch/{watch_id}/_deactivate</summary>
+///<param name="watch_id">this parameter is required</param>
+		public XpackWatcherDeactivateWatchRequest(Id watch_id) : base(r=>r.Required("watch_id", watch_id)){}
+		
+
+			///<summary>Specify timeout for watch write operation</summary>
+		public Time MasterTimeout { get { return Q<Time>("master_timeout"); } set { Q("master_timeout", value.ToString()); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherDeleteWatchRequest : IRequest<XpackWatcherDeleteWatchRequestParameters> 
+	{
+		Id Id { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherDeleteWatch <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-delete-watch.html</pre></summary>
+	public partial class XpackWatcherDeleteWatchRequest  : PlainRequestBase<XpackWatcherDeleteWatchRequestParameters>, IXpackWatcherDeleteWatchRequest
+	{
+		protected IXpackWatcherDeleteWatchRequest Self => this;
+		Id IXpackWatcherDeleteWatchRequest.Id => Self.RouteValues.Get<Id>("id");
+			/// <summary>/_xpack/watcher/watch/{id}</summary>
+///<param name="id">this parameter is required</param>
+		public XpackWatcherDeleteWatchRequest(Id id) : base(r=>r.Required("id", id)){}
+		
+
+			///<summary>Specify timeout for watch write operation</summary>
+		public Time MasterTimeout { get { return Q<Time>("master_timeout"); } set { Q("master_timeout", value.ToString()); } }
+		
+		///<summary>Specify if this request should be forced and ignore locks</summary>
+		public bool Force { get { return Q<bool>("force"); } set { Q("force", value); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherExecuteWatchRequest : IRequest<XpackWatcherExecuteWatchRequestParameters> 
+	{
+		Id Id { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherExecuteWatch <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-execute-watch.html</pre></summary>
+	public partial class XpackWatcherExecuteWatchRequest  : PlainRequestBase<XpackWatcherExecuteWatchRequestParameters>, IXpackWatcherExecuteWatchRequest
+	{
+		protected IXpackWatcherExecuteWatchRequest Self => this;
+		Id IXpackWatcherExecuteWatchRequest.Id => Self.RouteValues.Get<Id>("id");
+			/// <summary>/_xpack/watcher/watch/{id}/_execute</summary>
+///<param name="id">Optional, accepts null</param>
+		public XpackWatcherExecuteWatchRequest(Id id) : base(r=>r.Optional("id", id)){}
+		
+
+		/// <summary>/_xpack/watcher/watch/_execute</summary>
+		public XpackWatcherExecuteWatchRequest() : base(){}
+		
+
+			///<summary>indicates whether the watch should execute in debug mode</summary>
+		public bool Debug { get { return Q<bool>("debug"); } set { Q("debug", value); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherGetWatchRequest : IRequest<XpackWatcherGetWatchRequestParameters> 
+	{
+		Id Id { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherGetWatch <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-get-watch.html</pre></summary>
+	public partial class XpackWatcherGetWatchRequest  : PlainRequestBase<XpackWatcherGetWatchRequestParameters>, IXpackWatcherGetWatchRequest
+	{
+		protected IXpackWatcherGetWatchRequest Self => this;
+		Id IXpackWatcherGetWatchRequest.Id => Self.RouteValues.Get<Id>("id");
+			/// <summary>/_xpack/watcher/watch/{id}</summary>
+///<param name="id">this parameter is required</param>
+		public XpackWatcherGetWatchRequest(Id id) : base(r=>r.Required("id", id)){}
+		
+
+			///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherPutWatchRequest : IRequest<XpackWatcherPutWatchRequestParameters> 
+	{
+		Id Id { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherPutWatch <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-put-watch.html</pre></summary>
+	public partial class XpackWatcherPutWatchRequest  : PlainRequestBase<XpackWatcherPutWatchRequestParameters>, IXpackWatcherPutWatchRequest
+	{
+		protected IXpackWatcherPutWatchRequest Self => this;
+		Id IXpackWatcherPutWatchRequest.Id => Self.RouteValues.Get<Id>("id");
+			/// <summary>/_xpack/watcher/watch/{id}</summary>
+///<param name="id">this parameter is required</param>
+		public XpackWatcherPutWatchRequest(Id id) : base(r=>r.Required("id", id)){}
+		
+
+			///<summary>Specify timeout for watch write operation</summary>
+		public Time MasterTimeout { get { return Q<Time>("master_timeout"); } set { Q("master_timeout", value.ToString()); } }
+		
+		///<summary>Specify whether the watch is in/active by default</summary>
+		public bool Active { get { return Q<bool>("active"); } set { Q("active", value); } }
+		
+		///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherRestartRequest : IRequest<XpackWatcherRestartRequestParameters> 
+	{
+	 } 
+	///<summary>Request parameters for XpackWatcherRestart <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html</pre></summary>
+	public partial class XpackWatcherRestartRequest  : PlainRequestBase<XpackWatcherRestartRequestParameters>, IXpackWatcherRestartRequest
+	{
+		protected IXpackWatcherRestartRequest Self => this;
+				///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherStartRequest : IRequest<XpackWatcherStartRequestParameters> 
+	{
+	 } 
+	///<summary>Request parameters for XpackWatcherStart <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html</pre></summary>
+	public partial class XpackWatcherStartRequest  : PlainRequestBase<XpackWatcherStartRequestParameters>, IXpackWatcherStartRequest
+	{
+		protected IXpackWatcherStartRequest Self => this;
+				///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherStatsRequest : IRequest<XpackWatcherStatsRequestParameters> 
+	{
+		Metrics Metric { get; }
+	 } 
+	///<summary>Request parameters for XpackWatcherStats <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-stats.html</pre></summary>
+	public partial class XpackWatcherStatsRequest  : PlainRequestBase<XpackWatcherStatsRequestParameters>, IXpackWatcherStatsRequest
+	{
+		protected IXpackWatcherStatsRequest Self => this;
+		Metrics IXpackWatcherStatsRequest.Metric => Self.RouteValues.Get<Metrics>("metric");
+			/// <summary>/_xpack/watcher/stats</summary>
+		public XpackWatcherStatsRequest() : base(){}
+		
+
+		/// <summary>/_xpack/watcher/stats/{metric}</summary>
+///<param name="metric">Optional, accepts null</param>
+		public XpackWatcherStatsRequest(XpackWatcherStatsMetric metric) : base(r=>r.Optional("metric", (Metrics)metric)){}
+		
+
+			///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
+	
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public partial interface IXpackWatcherStopRequest : IRequest<XpackWatcherStopRequestParameters> 
+	{
+	 } 
+	///<summary>Request parameters for XpackWatcherStop <pre>http://www.elastic.co/guide/en/watcher/current/appendix-api-service.html</pre></summary>
+	public partial class XpackWatcherStopRequest  : PlainRequestBase<XpackWatcherStopRequestParameters>, IXpackWatcherStopRequest
+	{
+		protected IXpackWatcherStopRequest Self => this;
+				///<summary>The URL-encoded request definition</summary>
+		public string Source { get { return Q<string>("source"); } set { Q("source", value); } }
+		
+		///<summary>Comma separated list of filters used to reduce the response returned by Elasticsearch</summary>
+		public string FilterPath { get { return Q<string>("filter_path"); } set { Q("filter_path", value); } }
+		
+		//TODO THIS METHOD IS UNMAPPED!
+	
+	}
 }
  
