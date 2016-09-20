@@ -103,7 +103,8 @@ module Profiler =
     let IndexResults url =
         if (String.IsNullOrEmpty url = false) && (fileExists profileOutput) then
             trace "Indexing profile results into Elasticsearch"
-            let client = new ElasticClient()
+            let uri = new Uri(url)
+            let client = new ElasticClient(uri)
             use file = File.OpenRead profileOutput
             let profile = Profile.Load file
             
