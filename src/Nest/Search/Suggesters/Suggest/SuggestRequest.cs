@@ -9,12 +9,14 @@ namespace Nest
 	{
 		string GlobalText { get; set; }
 		ISuggestContainer Suggest { get; set; }
+		Union<bool, ISourceFilter> Source { get; set; }
 	}
 
-	public partial class SuggestRequest
+	public partial class SuggestRequest : ISuggestRequest
 	{
 		public string GlobalText { get; set; }
 		public ISuggestContainer Suggest { get; set; }
+		public Union<bool, ISourceFilter> Source { get; set; }
 	}
 
 	[DescriptorFor("Suggest")]
@@ -22,11 +24,17 @@ namespace Nest
 	{
 		string ISuggestRequest.GlobalText { get; set; }
 		ISuggestContainer ISuggestRequest.Suggest { get; set; } = new SuggestContainer();
+		Union<bool, ISourceFilter> ISuggestRequest.Source { get; set; }
 
 		/// <summary>
 		/// To avoid repetition of the suggest text, it is possible to define a global text.
 		/// </summary>
 		public SuggestDescriptor<T> GlobalText(string globalText) => Assign(a => a.GlobalText = globalText);
+
+		public SuggestDescriptor<T> Source(bool enabled = true) => Assign(a => a.Source = enabled);
+
+		public SuggestDescriptor<T> Source(Func<SourceFilterDescriptor<T>, ISourceFilter> selector) =>
+			Assign(a => a.Source = new Union<bool, ISourceFilter>(selector?.Invoke(new SourceFilterDescriptor<T>())));
 
 		/// <summary>
 		/// The term suggester suggests terms based on edit distance. The provided suggest text is analyzed before terms are suggested.

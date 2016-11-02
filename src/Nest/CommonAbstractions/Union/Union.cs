@@ -3,6 +3,16 @@ using Newtonsoft.Json;
 
 namespace Nest
 {
+	/// <summary>
+	/// A union of two types. An instance of
+	/// <typeparamref name="TFirst"/> or <typeparamref name="TSecond"/> may be passed as the value,
+	/// with an implicit conversion to <see cref="Union{TFirst,TSecond}"/>.
+	/// </summary>
+	/// <remarks>
+	/// Allows a property to accept two different representations.
+	/// </remarks>
+	/// <typeparam name="TFirst">The first type</typeparam>
+	/// <typeparam name="TSecond">The second type</typeparam>
 	[JsonConverter(typeof(UnionJsonConverter))]
 	public class Union<TFirst, TSecond>
 	{

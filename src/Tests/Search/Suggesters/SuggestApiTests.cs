@@ -35,6 +35,10 @@ namespace Tests.Search.Suggesters
 
 		protected override object ExpectJson =>
 			new Dictionary<string, object> {
+					{  "_source", new {
+						includes = new [] { "name" }
+					  }
+					},
 					{  "my-completion-suggest", new {
 					  completion = new {
 						analyzer = "simple",
@@ -96,6 +100,11 @@ namespace Tests.Search.Suggesters
 			};
 
 		protected override Func<SuggestDescriptor<Project>, ISuggestRequest> Fluent => s => s
+				.Source(sf => sf
+					.Includes(f => f
+						.Field(p => p.Name)
+					)
+				)
 				.Term("my-term-suggest", t => t
 					.MaxEdits(1)
 					.MaxInspections(2)
@@ -145,8 +154,12 @@ namespace Tests.Search.Suggesters
 				);
 
 		protected override SuggestRequest Initializer =>
-			new SuggestRequest()
+			new SuggestRequest
 			{
+				Source = new SourceFilter
+				{
+					Includes = Field<Project>(p => p.Name)
+				},
 				Suggest = new SuggestContainer
 				{
 					{ "my-term-suggest", new SuggestBucket

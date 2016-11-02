@@ -28,6 +28,12 @@ namespace Nest
 				writer.WriteValue(suggestRequest.GlobalText);
 			}
 
+			if (suggestRequest.Source != null)
+			{
+				writer.WritePropertyName("_source");
+				serializer.Serialize(writer, suggestRequest.Source);
+			}
+
 			if (suggestRequest.Suggest != null)
 			{
 				foreach (var kv in (IEnumerable<KeyValuePair<string, ISuggestBucket>>)suggestRequest.Suggest)
