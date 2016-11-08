@@ -229,13 +229,12 @@ namespace Nest
 			Assign(a => a.Source = new Union<bool, ISourceFilter>(selector?.Invoke(new SourceFilterDescriptor<T>())));
 
 		/// <summary>
-		/// The number of hits to return. Defaults to 10. When using scroll search type
-		/// size is actually multiplied by the number of shards!
+		/// The number of hits to return. Defaults to 10.
 		/// </summary>
 		public SearchDescriptor<T> Size(int size) => Assign(a => a.Size = size);
 
 		/// <summary>
-		/// The number of hits to return. Defaults to 10.
+		/// The number of hits to return. Alias for <see cref="Size"/>. Defaults to 10.
 		/// </summary>
 		public SearchDescriptor<T> Take(int take) => this.Size(take);
 
@@ -245,7 +244,7 @@ namespace Nest
 		public SearchDescriptor<T> From(int from) => Assign(a => a.From = from);
 
 		/// <summary>
-		/// The starting from index of the hits to return. Defaults to 0.
+		/// The starting from index of the hits to return. Alias for <see cref="From"/>. Defaults to 0.
 		/// </summary>
 		public SearchDescriptor<T> Skip(int skip) => this.From(skip);
 
@@ -408,7 +407,7 @@ namespace Nest
 		/// Filter search using a filter descriptor lambda
 		/// </summary>
 		public SearchDescriptor<T> PostFilter(Func<QueryContainerDescriptor<T>, QueryContainer> filter) =>
-			Assign(a => a.PostFilter = filter.Invoke(new QueryContainerDescriptor<T>()));
+			Assign(a => a.PostFilter = filter?.Invoke(new QueryContainerDescriptor<T>()));
 
 		/// <summary>
 		/// Allow to highlight search results on one or more fields. The implementation uses the either lucene fast-vector-highlighter or highlighter.

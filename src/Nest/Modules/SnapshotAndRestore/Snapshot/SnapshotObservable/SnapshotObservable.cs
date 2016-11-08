@@ -63,7 +63,7 @@ namespace Nest
 				_snapshotStatusHumbleObject.Completed += onCompleted;
 				_snapshotStatusHumbleObject.Error += onError;
 
-				_timer = new Timer(Snapshot, observer, _interval, Timeout.InfiniteTimeSpan);
+				_timer = new Timer(Snapshot, observer, _interval, System.Threading.Timeout.InfiniteTimeSpan);
 			}
 			catch (Exception exception)
 			{
@@ -86,7 +86,7 @@ namespace Nest
 
 				_snapshotStatusHumbleObject.CheckStatus();
 
-				_timer.Change(TimeSpan.FromMilliseconds(Math.Max(0, _interval.TotalMilliseconds - watch.ElapsedMilliseconds)), Timeout.InfiniteTimeSpan);
+				_timer.Change(TimeSpan.FromMilliseconds(Math.Max(0, _interval.TotalMilliseconds - watch.ElapsedMilliseconds)), System.Threading.Timeout.InfiniteTimeSpan);
 			}
 			catch (Exception exception)
 			{
@@ -97,7 +97,7 @@ namespace Nest
 
 		private void StopTimer(object sender, EventArgs restoreCompletedEventArgs)
 		{
-			_timer.Change(Timeout.Infinite, Timeout.Infinite);
+			_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
 		}
 
 		public void Dispose()

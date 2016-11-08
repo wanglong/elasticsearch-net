@@ -69,7 +69,7 @@ namespace Tests.Framework
 			this._cluster.ClientThrows(true);
 			this.AssertPoolBeforeCall?.Invoke(this._cluster.ConnectionPool);
 
-			Action call = () => this._cluster.ClientCall(callTrace?.RequestOverrides);
+			System.Action call = () => this._cluster.ClientCall(callTrace?.RequestOverrides);
 			var exception = call.ShouldThrowExactly<ElasticsearchClientException>()
 				.Subject.First();
 			assert(exception);
@@ -98,7 +98,7 @@ namespace Tests.Framework
 			this._cluster.ClientThrows(false);
 			this.AssertPoolBeforeCall?.Invoke(this._cluster.ConnectionPool);
 
-			Action call = () => { this.Response = this._cluster.ClientCall(callTrace?.RequestOverrides); };
+			System.Action call = () => { this.Response = this._cluster.ClientCall(callTrace?.RequestOverrides); };
 			call.ShouldNotThrow();
 
 			this.Response.ShouldNotBeValid();
@@ -132,7 +132,7 @@ namespace Tests.Framework
 			this._cluster  = _cluster ?? this.Cluster();
 			this.AssertPoolBeforeCall?.Invoke(this._cluster.ConnectionPool);
 
-			Action call = () => this._cluster.ClientCall(callTrace?.RequestOverrides);
+			System.Action call = () => this._cluster.ClientCall(callTrace?.RequestOverrides);
 			var exception = call.ShouldThrowExactly<UnexpectedElasticsearchClientException>()
 				.Subject.First();
 			assert(exception);

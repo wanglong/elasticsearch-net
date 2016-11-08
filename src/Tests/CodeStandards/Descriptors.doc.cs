@@ -37,6 +37,32 @@ namespace Tests.CodeStandards
 				from t in typeof(DescriptorBase<,>).Assembly().Types()
 				where t.IsClass() && typeof(IDescriptor).IsAssignableFrom(t)
 				select t;
+
+			var exclusions = new Dictionary<Type, Type>
+			{
+				{ typeof(QueryContainerDescriptor<>), typeof(QueryContainer) },
+				{ typeof(ConditionDescriptor), typeof(ConditionContainer) },
+				{ typeof(TriggerDescriptor), typeof(TriggerContainer) },
+				{ typeof(TransformDescriptor), typeof(TransformContainer) },
+				{ typeof(InputDescriptor), typeof(InputContainer) },
+				{ typeof(FluentDictionary<,>), typeof(FluentDictionary<,>) }
+			};
+
+			Func<Type, Type, bool> exclude = (first, second) =>
+			{
+				var key = first.IsGenericType()
+					? first.GetGenericTypeDefinition()
+					: first;
+
+				Type value;
+				if (!exclusions.TryGetValue(key, out value))
+					return false;
+
+				return second.IsGenericType()
+					? second.GetGenericTypeDefinition() == value
+					: value.IsAssignableFrom(second);
+			};
+
 			var selectorMethods =
 				from d in descriptors
 				from m in d.GetMethods()
@@ -49,16 +75,7 @@ namespace Tests.CodeStandards
 				where isFunc
                 let firstFuncArg = type.GetGenericArguments().First()
                 let secondFuncArg = type.GetGenericArguments().Last()
-                let isQueryFunc = firstFuncArg.IsGenericType() &&
-                    firstFuncArg.GetGenericTypeDefinition() == typeof(QueryContainerDescriptor<>) &&
-                    typeof(QueryContainer).IsAssignableFrom(secondFuncArg)
-                where !isQueryFunc
-                let isFluentDictionaryFunc =
-                    firstFuncArg.IsGenericType() &&
-                    firstFuncArg.GetGenericTypeDefinition() == typeof(FluentDictionary<,>) &&
-                    secondFuncArg.IsGenericType() &&
-                    secondFuncArg.GetGenericTypeDefinition() == typeof(FluentDictionary<,>)
-                where !isFluentDictionaryFunc
+				where !exclude(firstFuncArg, secondFuncArg)
                 let lastArgIsNotInterface = !secondFuncArg.IsInterface()
 				where lastArgIsNotInterface
 				select $"{m.Name} on {m.DeclaringType.Name}";

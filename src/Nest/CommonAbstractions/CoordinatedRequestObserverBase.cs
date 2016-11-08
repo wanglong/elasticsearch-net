@@ -1,14 +1,15 @@
 ﻿using System;
 
+
 namespace Nest
 {
 	public abstract class CoordinatedRequestObserverBase<T> : IObserver<T>
 	{
 		private readonly Action<T> _onNext;
 		private readonly Action<Exception> _onError;
-		private readonly Action _completed;
+		private readonly System.Action _completed;
 
-		protected CoordinatedRequestObserverBase(Action<T> onNext = null, Action<Exception> onError = null, Action completed = null)
+		protected CoordinatedRequestObserverBase(Action<T> onNext = null, Action<Exception> onError = null, System.Action completed = null)
 		{
 			_onNext = onNext;
 			_onError = onError;

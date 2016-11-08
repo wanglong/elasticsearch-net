@@ -17,7 +17,7 @@ namespace Nest
 		public ServerError ServerError => this._error ?? this._original.ServerError;
 
 		public Exception OriginalException => this._original.OriginalException;
-		public HttpMethod HttpMethod => this._original.HttpMethod;
+		public Elasticsearch.Net.HttpMethod HttpMethod => this._original.HttpMethod;
 		public Uri Uri => this._original.Uri;
 		public int? HttpStatusCode => this._original.HttpStatusCode;
 		public byte[] ResponseBodyInBytes => this._original.ResponseBodyInBytes;

@@ -43,7 +43,7 @@ namespace Tests.Framework
 		protected abstract LazyResponses ClientUsage();
 
 		protected abstract string UrlPath { get; }
-		protected abstract HttpMethod HttpMethod { get; }
+		protected abstract Elasticsearch.Net.HttpMethod HttpMethod { get; }
 
 		protected ApiTestBase(ClusterBase cluster, EndpointUsage usage) : base(cluster)
 		{
