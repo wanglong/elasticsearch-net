@@ -1319,9 +1319,13 @@
     <Compile Include="XPack\Security\User\PutUser\PutUserResponse.cs" />
     <Compile Include="XPack\Security\User\PutUser\ElasticClient-PutUser.cs" />
     <Compile Include="XPack\Watcher\Action\ActionBase.cs" />
+    <Compile Include="XPack\Watcher\Action\ActionsDescriptorBase.cs" />
     <Compile Include="XPack\Watcher\Action\ActionType.cs" />
     <Compile Include="XPack\Watcher\Action\EmailAction.cs" />
+    <Compile Include="XPack\Watcher\Action\EmailAttachments.cs" />
+    <Compile Include="XPack\Watcher\Action\EmailBody.cs" />
     <Compile Include="XPack\Watcher\Action\EmailPriority.cs" />
+    <Compile Include="XPack\Watcher\Action\EmailResult.cs" />
     <Compile Include="XPack\Watcher\Action\HipChatAction.cs" />
     <Compile Include="XPack\Watcher\Action\IndexAction.cs" />
     <Compile Include="XPack\Watcher\Action\PagerDutyAction.cs" />

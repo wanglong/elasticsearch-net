@@ -9,24 +9,34 @@ namespace Nest
 	[JsonObject(MemberSerialization.OptIn)]
 	public interface IAction
 	{
+		[JsonIgnore]
+		string Name { get; }
+
+		[JsonIgnore]
+		ActionType ActionType { get; }
+
 		[JsonProperty("transform")]
 		TransformContainer Transform { get; set; }
 
 		// TODO: Should this be a Time (or similar type)?
 		[JsonIgnore]
 		string ThrottlePeriod { get; set; }
-
-		[JsonIgnore]
-		ActionType ActionType { get; }
 	}
 
 	public abstract class ActionBase : IAction
 	{
+		protected ActionBase(string name)
+		{
+			this.Name = name;
+		}
+
+		public string Name { get; internal set; }
+
+		public abstract ActionType ActionType { get; }
+
 		public TransformContainer Transform { get; set; }
 
 		public string ThrottlePeriod { get; set; }
-
-		public abstract ActionType ActionType { get; }
 	}
 
 	internal class ActionsJsonConverter : JsonConverter
@@ -85,6 +95,8 @@ namespace Nest
 
 						if (action != null)
 						{
+							// HACK!
+							((ActionBase)action).Name = name;
 							action.ThrottlePeriod = throttlePeriod;
 							dictionary.Add(name, action);
 						}
@@ -92,7 +104,7 @@ namespace Nest
 				}
 			}
 
-			return dictionary;
+			return new Actions(dictionary);
 		}
 
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -11,70 +11,42 @@ namespace Nest
 	{
 		[JsonProperty("account")]
 		string Account { get; set; }
+
 		[JsonProperty("from")]
 		string From { get; set; }
+
 		[JsonProperty("to")]
 		IEnumerable<string> To { get; set; }
+
 		[JsonProperty("cc")]
 		IEnumerable<string> Cc { get; set; }
+
 		[JsonProperty("bcc")]
 		IEnumerable<string> Bcc { get; set; }
+
 		[JsonProperty("reply_to")]
 		IEnumerable<string> ReplyTo { get; set; }
+
 		[JsonProperty("subject")]
 		string Subject { get; set; }
+
 		[JsonProperty("body")]
-		EmailBody Body { get; set; }
+		IEmailBody Body { get; set; }
+
 		[JsonProperty("priority")]
 		EmailPriority? Priority { get; set; }
 
 		[JsonProperty("attachments")]
-		IDictionary<string, EmailAttachmentBase> Attachments { get; set; }
-	}
-
-	public abstract class EmailAttachmentBase {}
-
-	[JsonObject]
-	public class HttpAttachment : EmailAttachmentBase
-	{
-		[JsonProperty("content_type")]
-		public string ContentType { get; set; }
-
-		[JsonProperty("inline")]
-		public bool? Inline { get; set; }
-
-		[JsonProperty("request")]
-		public IHttpInputRequest Request { get; set; }
-	}
-
-	public class DataAttachment : EmailAttachmentBase
-	{
-		[JsonProperty("format")]
-		public DataAttachmentFormat? Format { get; set; }
-	}
-
-	[JsonConverter(typeof(StringEnumConverter))]
-	public enum DataAttachmentFormat
-	{
-		[EnumMember(Value = "json")]
-		Json,
-		[EnumMember(Value = "yaml")]
-		Yaml
-	}
-
-
-	[JsonObject]
-	public class EmailBody
-	{
-		[JsonProperty("text")]
-		public string Text { get; set; }
-		[JsonProperty("html")]
-		public string Html { get; set; }
+		IDictionary<string, IEmailAttachment> Attachments { get; set; }
 	}
 
 	public class EmailAction : ActionBase, IEmailAction
 	{
 		public override ActionType ActionType => ActionType.Email;
+
+		public EmailAction(string name) : base(name)
+		{
+		}
 
 		public string Account { get; set; }
 
@@ -90,43 +62,60 @@ namespace Nest
 
 		public string Subject { get; set; }
 
-		public EmailBody Body { get; set; }
+		public IEmailBody Body { get; set; }
 
 		public EmailPriority? Priority { get; set; }
 
-		public IDictionary<string, EmailAttachmentBase> Attachments { get; set; }
+		public IDictionary<string, IEmailAttachment> Attachments { get; set; }
 	}
 
-	public class EmailResult
+	public class EmailActionDescriptor : ActionsDescriptorBase<EmailActionDescriptor, IEmailAction>, IEmailAction
 	{
-		[JsonProperty("id")]
-		public string Id { get; set; }
+		public EmailActionDescriptor(string name) : base(name)
+		{
+		}
 
-		[JsonProperty("sent_date")]
-		public DateTime? SentDate { get; set; }
+		protected override ActionType ActionType => ActionType.Email;
 
-		[JsonProperty("from")]
-		public string From { get; set; }
+		string IEmailAction.Account { get; set; }
+		string IEmailAction.From { get; set; }
+		IEnumerable<string> IEmailAction.To { get; set; }
+		IEnumerable<string> IEmailAction.Cc { get; set; }
+		IEnumerable<string> IEmailAction.Bcc { get; set; }
+		IEnumerable<string> IEmailAction.ReplyTo { get; set; }
+		string IEmailAction.Subject { get; set; }
+		IEmailBody IEmailAction.Body { get; set; }
+		EmailPriority? IEmailAction.Priority { get; set; }
+		IDictionary<string, IEmailAttachment> IEmailAction.Attachments { get; set; }
 
-		[JsonProperty("to")]
-		public IEnumerable<string> To { get; set; }
+		public EmailActionDescriptor Account(string account) => Assign(a => a.Account = account);
 
-		[JsonProperty("cc")]
-		public IEnumerable<string> Cc { get; set; }
+		public EmailActionDescriptor From(string from) => Assign(a => a.From = from);
 
-		[JsonProperty("bcc")]
-		public IEnumerable<string> Bcc { get; set; }
+		public EmailActionDescriptor To(IEnumerable<string> to) => Assign(a => a.To = to);
 
-		[JsonProperty("reply_to")]
-		public IEnumerable<string> ReplyTo { get; set; }
+		public EmailActionDescriptor To(params string[] to) => Assign(a => a.To = to);
 
-		[JsonProperty("subject")]
-		public string Subject { get; set; }
+		public EmailActionDescriptor Cc(IEnumerable<string> cc) => Assign(a => a.Cc = cc);
 
-		[JsonProperty("body")]
-		public EmailBody Body { get; set; }
+		public EmailActionDescriptor Cc(params string[] cc) => Assign(a => a.Cc = cc);
 
-		[JsonProperty("priority")]
-		public EmailPriority? Priority { get; set; }
+		public EmailActionDescriptor Bcc(IEnumerable<string> bcc) => Assign(a => a.Bcc = bcc);
+
+		public EmailActionDescriptor Bcc(params string[] bcc) => Assign(a => a.Bcc = bcc);
+
+		public EmailActionDescriptor ReplyTo(IEnumerable<string> replyTo) => Assign(a => a.ReplyTo = replyTo);
+
+		public EmailActionDescriptor ReplyTo(params string[] replyTo) => Assign(a => a.ReplyTo = replyTo);
+
+		public EmailActionDescriptor Subject(string subject) => Assign(a => a.Subject = subject);
+
+		public EmailActionDescriptor Body(Func<EmailBodyDescriptor, IEmailBody> selector) =>
+			Assign(a => a.Body = selector.InvokeOrDefault(new EmailBodyDescriptor()));
+
+		public EmailActionDescriptor Priority(EmailPriority priority) => Assign(a => a.Priority = priority);
+
+		// TODO: Implement
+		public EmailActionDescriptor Attachments() => this;
 	}
 }
