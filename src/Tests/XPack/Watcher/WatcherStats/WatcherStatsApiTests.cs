@@ -28,12 +28,11 @@ namespace Tests.XPack.Watcher.WatcherStats
 						)
 					)
 					.Actions(a => a
-						.Add("test_index", new IndexAction
-						{
-							ThrottlePeriod = "1s",
-							Index = "test-" + CallIsolatedValue,
-							DocType = "acknowledgement"
-						})
+						.Index("test_index", i => i
+							.ThrottlePeriod("1s")
+							.Index("test-" + CallIsolatedValue)
+							.DocType("acknowledgement")
+						)
 					)
 				);
 

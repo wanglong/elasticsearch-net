@@ -28,7 +28,6 @@ namespace Tests.XPack.Watcher.PutWatch
 
 		protected override string UrlPath => $"/_xpack/watcher/watch/{CallIsolatedValue}";
 
-		// TODO: Should this be deserializable?
 		protected override bool SupportsDeserialization => false;
 
 		protected override PutWatchDescriptor NewDescriptor() => new PutWatchDescriptor(CallIsolatedValue);
@@ -164,7 +163,38 @@ namespace Tests.XPack.Watcher.PutWatch
 							body = new
 							{
 								text = "Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone"
+							},
+							attachments = new
+							{
+								http_attachment = new
+								{
+									http = new
+									{
+										inline = true,
+										content_type = "application/json",
+										request = new
+										{
+											url = "http://localhost:8080/http_attachment"
+										}
+									}
+								},
+								data_attachment = new
+								{
+									data = new
+									{
+										format = "json"
+									}
+								}
 							}
+						}
+					},
+					reminder_index = new
+					{
+						index = new
+						{
+							index = "put-watch-test-index",
+							doc_type = "reminder",
+							execution_time_field = "execution_time"
 						}
 					}
 				}
@@ -248,15 +278,29 @@ namespace Tests.XPack.Watcher.PutWatch
 				)
 			)
 			.Actions(a => a
-				.Add("reminder_email", new EmailAction
-					{
-						To = new [] { "me@example.com" },
-						Subject = "Something's strange in the neighbourhood",
-						Body = new EmailBody
-						{
-							Text = "Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone"
-						}
-					}
+				.Email("reminder_email", e => e
+					.To("me@example.com")
+					.Subject("Something's strange in the neighbourhood")
+					.Body(b => b
+						.Text("Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone")
+					)
+					.Attachments(ea => ea
+						.HttpAttachment("http_attachment", ha => ha
+							.Inline()
+							.ContentType("application/json")
+							.Request(r => r
+								.Url("http://localhost:8080/http_attachment")
+							)
+						)
+						.DataAttachment("data_attachment", da => da
+							.Format(DataAttachmentFormat.Json)
+						)
+					)
+				)
+				.Index("reminder_index", i => i
+					.Index("put-watch-test-index")
+					.DocType("reminder")
+					.ExecutionTimeField("execution_time")
 				)
 			);
 
@@ -341,20 +385,40 @@ namespace Tests.XPack.Watcher.PutWatch
 						new TimeOfWeek(Day.Friday, "17:00"),
 					}
 				},
-				Actions = new Dictionary<string, IAction>
-				{
+				Actions = new EmailAction("reminder_email")
 					{
-						"reminder_email", new EmailAction
+						To = new [] { "me@example.com" },
+						Subject = "Something's strange in the neighbourhood",
+						Body = new EmailBody
 						{
-							To = new [] { "me@example.com" },
-							Subject = "Something's strange in the neighbourhood",
-							Body = new EmailBody
+							Text = "Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone"
+						},
+						Attachments = new EmailAttachments
+						{
 							{
-								Text = "Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone"
+								"http_attachment", new HttpAttachment
+								{
+									Inline = true,
+									ContentType = "application/json",
+									Request = new HttpInputRequest
+									{
+										Url = "http://localhost:8080/http_attachment"
+									}
+								}
+							},
+							{
+								"data_attachment", new DataAttachment
+								{
+									Format = DataAttachmentFormat.Json
+								}
 							}
 						}
+					} && new IndexAction("reminder_index")
+					{
+					    Index = "put-watch-test-index",
+						DocType = "reminder",
+						ExecutionTimeField = "execution_time"
 					}
-				}
 			};
 
 		protected override void ExpectResponse(IPutWatchResponse response)

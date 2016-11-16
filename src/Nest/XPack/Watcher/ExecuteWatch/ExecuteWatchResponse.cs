@@ -137,9 +137,7 @@ namespace Nest
 		[JsonProperty("status")]
 		public Status Status { get; set; }
 
-		//TODO: Add other actions here
-		// TODO: Should these be coerced into an
-		// IActionResult common result?
+		//TODO: Add other actions here. Should these be coerced into an IActionResult common result?
 		[JsonProperty("email")]
 		public EmailActionResult Email { get; set; }
 

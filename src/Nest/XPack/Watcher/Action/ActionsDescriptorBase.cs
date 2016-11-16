@@ -7,7 +7,7 @@ namespace Nest
 		where TDescriptor : DescriptorBase<TDescriptor, TInterface>, TInterface
 		where TInterface : class, IAction
 	{
-		private readonly string _name;
+		private string _name;
 
 		protected ActionsDescriptorBase(string name)
 		{
@@ -17,7 +17,12 @@ namespace Nest
 			this._name = name;
 		}
 
-		string IAction.Name => this._name;
+		string IAction.Name
+		{
+			get { return this._name; }
+			set { this._name = value; }
+		}
+
 		ActionType IAction.ActionType => this.ActionType;
 		TransformContainer IAction.Transform { get; set; }
 		string IAction.ThrottlePeriod { get; set; }

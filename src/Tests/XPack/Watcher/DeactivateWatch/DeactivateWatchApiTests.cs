@@ -41,12 +41,11 @@ namespace Tests.XPack.Watcher.DeactivateWatch
 						)
 					)
 					.Actions(a => a
-						.Add("test_webhook", new WebhookAction
-						{
-							ThrottlePeriod = "15m",
-							Host = "localhost",
-							Port = 8080
-						})
+						.Webhook("test_webhook", w => w
+							.ThrottlePeriod("15m")
+							.Host("localhost")
+							.Port(8080)
+						)
 					)
 				);
 

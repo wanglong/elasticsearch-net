@@ -39,13 +39,12 @@ namespace Tests.XPack.Watcher.ActivateWatch
 						)
 					)
 					.Actions(a => a
-						.Add("test_logging", new LoggingAction
-						{
-							ThrottlePeriod = "15m",
-							Level = LogLevel.Debug,
-							Category = "Test",
-							Text = "Logging action test"
-						})
+						.Logging("test_logging", l => l
+							.ThrottlePeriod("15m")
+							.Level(LogLevel.Debug)
+							.Category("Test")
+							.Text("Logging action test")
+						)
 					)
 				);
 

@@ -37,7 +37,7 @@ namespace Nest
 		EmailPriority? Priority { get; set; }
 
 		[JsonProperty("attachments")]
-		IDictionary<string, IEmailAttachment> Attachments { get; set; }
+		IEmailAttachments Attachments { get; set; }
 	}
 
 	public class EmailAction : ActionBase, IEmailAction
@@ -66,7 +66,7 @@ namespace Nest
 
 		public EmailPriority? Priority { get; set; }
 
-		public IDictionary<string, IEmailAttachment> Attachments { get; set; }
+		public IEmailAttachments Attachments { get; set; }
 	}
 
 	public class EmailActionDescriptor : ActionsDescriptorBase<EmailActionDescriptor, IEmailAction>, IEmailAction
@@ -86,7 +86,7 @@ namespace Nest
 		string IEmailAction.Subject { get; set; }
 		IEmailBody IEmailAction.Body { get; set; }
 		EmailPriority? IEmailAction.Priority { get; set; }
-		IDictionary<string, IEmailAttachment> IEmailAction.Attachments { get; set; }
+		IEmailAttachments IEmailAction.Attachments { get; set; }
 
 		public EmailActionDescriptor Account(string account) => Assign(a => a.Account = account);
 
@@ -115,7 +115,7 @@ namespace Nest
 
 		public EmailActionDescriptor Priority(EmailPriority priority) => Assign(a => a.Priority = priority);
 
-		// TODO: Implement
-		public EmailActionDescriptor Attachments() => this;
+		public EmailActionDescriptor Attachments(Func<EmailAttachmentsDescriptor, IPromise<IEmailAttachments>> selector) =>
+			Assign(a => a.Attachments = selector?.Invoke(new EmailAttachmentsDescriptor())?.Value);
 	}
 }

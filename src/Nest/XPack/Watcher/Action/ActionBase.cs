@@ -10,7 +10,7 @@ namespace Nest
 	public interface IAction
 	{
 		[JsonIgnore]
-		string Name { get; }
+		string Name { get; set; }
 
 		[JsonIgnore]
 		ActionType ActionType { get; }
@@ -30,13 +30,48 @@ namespace Nest
 			this.Name = name;
 		}
 
-		public string Name { get; internal set; }
+		public string Name { get; set; }
 
 		public abstract ActionType ActionType { get; }
 
 		public TransformContainer Transform { get; set; }
 
 		public string ThrottlePeriod { get; set; }
+
+		//always evaluate to false so that each side of && equation is evaluated
+		public static bool operator false(ActionBase a) => false;
+
+		//always evaluate to false so that each side of && equation is evaluated
+		public static bool operator true(ActionBase a) => false;
+
+		public static ActionBase operator &(ActionBase left, ActionBase right)
+		{
+			return new ActionCombinator(left, right);
+		}
+	}
+
+	internal class ActionCombinator : ActionBase, IAction
+	{
+		internal List<ActionBase> Actions { get; } = new List<ActionBase>();
+
+		public ActionCombinator(ActionBase left, ActionBase right) : base(null)
+		{
+			this.AddAction(left);
+			this.AddAction(right);
+		}
+
+		private void AddAction(ActionBase agg)
+		{
+			if (agg == null) return;
+			var combinator = agg as ActionCombinator;
+			if ((combinator?.Actions.HasAny()).GetValueOrDefault(false))
+			{
+				this.Actions.AddRange(combinator.Actions);
+			}
+			else this.Actions.Add(agg);
+		}
+
+		public override ActionType ActionType => (ActionType)10;
 	}
 
 	internal class ActionsJsonConverter : JsonConverter
@@ -95,8 +130,7 @@ namespace Nest
 
 						if (action != null)
 						{
-							// HACK!
-							((ActionBase)action).Name = name;
+							action.Name = name;
 							action.ThrottlePeriod = throttlePeriod;
 							dictionary.Add(name, action);
 						}

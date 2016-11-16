@@ -23,7 +23,7 @@ namespace Nest
 		/// This is required
 		/// </summary>
 		[JsonProperty("port")]
-		int Port { get; set; }
+		int? Port { get; set; }
 
 		/// <summary>
 		/// The host to connect to. This is required
@@ -110,7 +110,7 @@ namespace Nest
 		public ConnectionScheme? Scheme { get; set; }
 
 		/// <inheritdoc />
-		public int Port { get; set; }
+		public int? Port { get; set; }
 
 		/// <inheritdoc />
 		public string Host { get; set; }
@@ -150,7 +150,7 @@ namespace Nest
 		: DescriptorBase<HttpInputRequestDescriptor, IHttpInputRequest>, IHttpInputRequest
 	{
 		ConnectionScheme? IHttpInputRequest.Scheme { get; set; }
-		int IHttpInputRequest.Port { get; set; }
+		int? IHttpInputRequest.Port { get; set; }
 		string IHttpInputRequest.Host { get; set; }
 		string IHttpInputRequest.Path { get; set; }
 		HttpInputMethod? IHttpInputRequest.Method { get; set; }

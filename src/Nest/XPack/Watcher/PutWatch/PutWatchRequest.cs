@@ -4,58 +4,6 @@ using Newtonsoft.Json;
 
 namespace Nest
 {
-	public interface IActions : IIsADictionary<string, IAction> { }
-
-	public class Actions : IsADictionaryBase<string, IAction>, IActions
-	{
-		public Actions()
-		{
-		}
-
-		public Actions(IDictionary<string, IAction> actions) : base(actions)
-		{
-		}
-
-		public static implicit operator Actions(ActionBase action)
-		{
-			if (action == null) return null;
-
-			if (action.Name.IsNullOrEmpty())
-				throw new ArgumentException($"{action.GetType().Name}.Name is not set!");
-
-			var actions = new Dictionary<string, IAction>{{ action.Name, action }};
-			return new Actions(actions);
-		}
-	}
-
-	public class ActionsDescriptor : IsADictionaryDescriptorBase<ActionsDescriptor, IActions, string, IAction>
-	{
-		public ActionsDescriptor() : base(new Actions())
-		{
-		}
-
-		public ActionsDescriptor Email(string name, Func<EmailActionDescriptor, IEmailAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new EmailActionDescriptor(name)));
-
-		public ActionsDescriptor HipChat(string name, Func<HipChatActionDescriptor, IHipChatAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new HipChatActionDescriptor(name)));
-
-		public ActionsDescriptor Index(string name, Func<IndexActionDescriptor, IIndexAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new IndexActionDescriptor(name)));
-
-		public ActionsDescriptor Logging(string name, Func<LoggingActionDescriptor, ILoggingAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new LoggingActionDescriptor(name)));
-
-		public ActionsDescriptor PagerDuty(string name, Func<PagerDutyActionDescriptor, IPagerDutyAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new PagerDutyActionDescriptor(name)));
-
-		public ActionsDescriptor Slack(string name, Func<SlackActionDescriptor, ISlackAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new SlackActionDescriptor(name)));
-
-		public ActionsDescriptor Webhook(string name, Func<WebhookActionDescriptor, IWebhookAction> selector) =>
-			Assign(name, selector.InvokeOrDefault(new WebhookActionDescriptor(name)));
-	}
-
 	public partial interface IPutWatchRequest
 	{
 		[JsonProperty("trigger")]
@@ -68,8 +16,7 @@ namespace Nest
 		ConditionContainer Condition { get; set; }
 
 		[JsonProperty("actions")]
-		[JsonConverter(typeof(ActionsJsonConverter))]
-		IActions Actions { get; set; }
+		Actions Actions { get; set; }
 
 		[JsonProperty("meta")]
 		[JsonConverter(typeof(VerbatimDictionaryKeysJsonConverter))]
@@ -96,7 +43,7 @@ namespace Nest
 
 		public TransformContainer Transform { get; set; }
 
-		public IActions Actions { get; set; }
+		public Actions Actions { get; set; }
 	}
 
 	[DescriptorFor("XpackWatcherPutWatch")]
@@ -104,7 +51,7 @@ namespace Nest
 	{
 		public PutWatchDescriptor() { }
 
-		IActions IPutWatchRequest.Actions { get; set; }
+		Actions IPutWatchRequest.Actions { get; set; }
 		ConditionContainer IPutWatchRequest.Condition { get; set; }
 		InputContainer IPutWatchRequest.Input { get; set; }
 		IDictionary<string, object> IPutWatchRequest.Meta { get; set; }
@@ -112,7 +59,7 @@ namespace Nest
 		TransformContainer IPutWatchRequest.Transform { get; set; }
 		TriggerContainer IPutWatchRequest.Trigger { get; set; }
 
-		public PutWatchDescriptor Actions(Func<ActionsDescriptor, IPromise<IActions>> actions) =>
+		public PutWatchDescriptor Actions(Func<ActionsDescriptor, IPromise<Actions>> actions) =>
 			Assign(a => a.Actions = actions?.Invoke(new ActionsDescriptor())?.Value);
 
 		public PutWatchDescriptor Condition(Func<ConditionDescriptor, ConditionContainer> selector) =>

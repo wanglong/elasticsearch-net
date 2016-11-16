@@ -36,12 +36,11 @@ namespace Tests.XPack.Watcher.AcknowledgeWatch
 						.Always()
 					)
 					.Actions(a => a
-						.Add("test_index", new IndexAction
-						{
-							ThrottlePeriod = "15m",
-							Index = "test-" + CallIsolatedValue,
-							DocType = "acknowledgement"
-						})
+						.Index("test_index", i => i
+							.ThrottlePeriod("15m")
+							.Index("test-" + CallIsolatedValue)
+							.DocType("acknowledgement")
+						)
 					)
 				);
 

@@ -27,15 +27,13 @@ namespace Tests.XPack.Watcher.GetWatch
 						)
 					)
 					.Actions(a => a
-						.Add("reminder_email", new EmailAction
-						{
-							To = new[] { "me@example.com" },
-							Subject = "Something's strange in the neighbourhood",
-							Body = new EmailBody
-							{
-								Text = "Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone"
-							}
-						})
+						.Email("reminder_email", e => e
+							.To("me@example.com")
+							.Subject("Something's strange in the neighbourhood")
+							.Body(b => b
+								.Text("Dear {{ctx.payload.name}}, by the time you read these lines, I'll be gone")
+							)
+						)
 					)
 				);
 
