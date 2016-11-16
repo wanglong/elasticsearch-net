@@ -25,13 +25,13 @@ namespace Nest
 
 		ActionType IAction.ActionType => this.ActionType;
 		TransformContainer IAction.Transform { get; set; }
-		string IAction.ThrottlePeriod { get; set; }
+		Time IAction.ThrottlePeriod { get; set; }
 
 		protected abstract ActionType ActionType { get; }
 
 		public TDescriptor Transform(Func<TransformDescriptor, TransformContainer> selector) =>
 			Assign(a => a.Transform = selector.InvokeOrDefault(new TransformDescriptor()));
 
-		public TDescriptor ThrottlePeriod(string throttlePeriod) => Assign(a => a.ThrottlePeriod = throttlePeriod);
+		public TDescriptor ThrottlePeriod(Time throttlePeriod) => Assign(a => a.ThrottlePeriod = throttlePeriod);
 	}
 }

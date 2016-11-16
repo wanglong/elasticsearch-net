@@ -17,7 +17,7 @@ namespace Nest
 		Field ExecutionTimeField { get; set; }
 
 		[JsonProperty("timeout")]
-		Timeout Timeout { get; set; }
+		Time Timeout { get; set; }
 	}
 
 	public class IndexAction : ActionBase, IIndexAction
@@ -30,7 +30,7 @@ namespace Nest
 
 		public Field ExecutionTimeField { get; set; }
 
-		public Timeout Timeout { get; set; }
+		public Time Timeout { get; set; }
 
 		public IndexAction(string name) : base(name)
 		{
@@ -42,7 +42,7 @@ namespace Nest
 		IndexName IIndexAction.Index { get; set; }
 		TypeName IIndexAction.DocType { get; set; }
 		Field IIndexAction.ExecutionTimeField { get; set; }
-		Timeout IIndexAction.Timeout { get; set; }
+		Time IIndexAction.Timeout { get; set; }
 
 		protected override ActionType ActionType => ActionType.Index;
 
@@ -62,6 +62,6 @@ namespace Nest
 
 		public IndexActionDescriptor ExecutionTimeField<T>(Expression<Func<T, object>> objectPath) => Assign(a => a.ExecutionTimeField = objectPath);
 
-		public IndexActionDescriptor Timeout(Timeout timeout) => Assign(a => a.Timeout = timeout);
+		public IndexActionDescriptor Timeout(Time timeout) => Assign(a => a.Timeout = timeout);
 	}
 }

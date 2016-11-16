@@ -25,9 +25,8 @@ namespace Nest
 		[JsonProperty("cron")]
 		CronExpression Cron { get; set; }
 
-		// TODO: Should this be a specific type?
 		[JsonProperty("interval")]
-		string Interval { get; set; }
+		Interval Interval { get; set; }
 	}
 
 	public class ScheduleContainer : TriggerBase, IScheduleContainer
@@ -46,7 +45,7 @@ namespace Nest
 		public IWeeklySchedule Weekly { get; set; }
 		public IYearlySchedule Yearly { get; set; }
 		public CronExpression Cron { get; set; }
-		public string Interval { get; set; }
+		public Interval Interval { get; set; }
 
 		internal override void WrapInContainer(ITriggerContainer container) => container.Schedule = this;
 
@@ -64,7 +63,7 @@ namespace Nest
 		IWeeklySchedule IScheduleContainer.Weekly { get; set; }
 		IYearlySchedule IScheduleContainer.Yearly { get; set; }
 		CronExpression IScheduleContainer.Cron { get; set; }
-		string IScheduleContainer.Interval { get; set; }
+		Interval IScheduleContainer.Interval { get; set; }
 
 		public ScheduleDescriptor Daily(Func<DailyScheduleDescriptor, IDailySchedule> selector) =>
 			Assign(a => a.Daily = selector.Invoke(new DailyScheduleDescriptor()));
@@ -83,6 +82,6 @@ namespace Nest
 
 		public ScheduleDescriptor Cron(CronExpression cron) => Assign(a => a.Cron = cron);
 
-		public ScheduleDescriptor Interval(string interval) => Assign(a => a.Interval = interval);
+		public ScheduleDescriptor Interval(Interval interval) => Assign(a => a.Interval = interval);
 	}
 }

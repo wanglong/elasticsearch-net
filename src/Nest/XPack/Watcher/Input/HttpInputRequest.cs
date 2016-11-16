@@ -86,7 +86,7 @@ namespace Nest
 		/// the input will timeout and fail.
 		/// </summary>
 		[JsonProperty("connection_timeout")]
-		Timeout ConnectionTimeout { get; set; }
+		Time ConnectionTimeout { get; set; }
 
 		/// <summary>
 		/// The timeout for reading data from http connection.
@@ -94,7 +94,7 @@ namespace Nest
 		/// the input will timeout and fail.
 		/// </summary>
 		[JsonProperty("read_timeout")]
-		Timeout ReadTimeout { get; set; }
+		Time ReadTimeout { get; set; }
 
 		/// <summary>
 		/// The HTTP request body.
@@ -137,10 +137,10 @@ namespace Nest
 		public IHttpInputProxy Proxy { get; set; }
 
 		/// <inheritdoc />
-		public Timeout ConnectionTimeout { get; set; }
+		public Time ConnectionTimeout { get; set; }
 
 		/// <inheritdoc />
-		public Timeout ReadTimeout { get; set; }
+		public Time ReadTimeout { get; set; }
 
 		/// <inheritdoc />
 		public string Body { get; set; }
@@ -159,8 +159,8 @@ namespace Nest
 		IHttpInputAuthentication IHttpInputRequest.Authentication { get; set; }
 		string IHttpInputRequest.Body { get; set; }
 		string IHttpInputRequest.Url { get; set; }
-		Timeout IHttpInputRequest.ReadTimeout { get; set; }
-		Timeout IHttpInputRequest.ConnectionTimeout { get; set; }
+		Time IHttpInputRequest.ReadTimeout { get; set; }
+		Time IHttpInputRequest.ConnectionTimeout { get; set; }
 		IHttpInputProxy IHttpInputRequest.Proxy { get; set; }
 
 		/// <inheritdoc />
@@ -171,7 +171,7 @@ namespace Nest
 		public HttpInputRequestDescriptor Body(string body) => Assign(a => a.Body = body);
 
 		/// <inheritdoc />
-		public HttpInputRequestDescriptor ConnectionTimeout(TimeSpan connectionTimeout) => Assign(a => a.ConnectionTimeout = connectionTimeout);
+		public HttpInputRequestDescriptor ConnectionTimeout(Time connectionTimeout) => Assign(a => a.ConnectionTimeout = connectionTimeout);
 
 		/// <inheritdoc />
 		public HttpInputRequestDescriptor Headers(Func<FluentDictionary<string, string>, FluentDictionary<string, string>> headersSelector) =>
@@ -206,53 +206,12 @@ namespace Nest
 			Assign(a => a.Proxy = proxySelector.Invoke(new HttpInputProxyDescriptor()));
 
 		/// <inheritdoc />
-		public HttpInputRequestDescriptor ReadTimeout(Timeout readTimeout) => Assign(a => a.ReadTimeout = readTimeout);
+		public HttpInputRequestDescriptor ReadTimeout(Time readTimeout) => Assign(a => a.ReadTimeout = readTimeout);
 
 		/// <inheritdoc />
 		public HttpInputRequestDescriptor Scheme(ConnectionScheme scheme) => Assign(a => a.Scheme = scheme);
 
 		/// <inheritdoc />
 		public HttpInputRequestDescriptor Url(string url) => Assign(a => a.Url = url);
-	}
-
-	[JsonConverter(typeof(TimeoutJsonConverter))]
-	public class Timeout
-	{
-		private readonly string _timeout;
-
-		// TODO: Validate it adheres to timeout format
-		public Timeout(string timeout)
-		{
-			this._timeout = timeout;
-		}
-
-		// TODO: Validate it adheres to timeout format
-		public Timeout(TimeSpan timeout)
-		{
-			this._timeout = timeout.ToString();
-		}
-
-		public static implicit operator Timeout(TimeSpan timeSpan) => new Timeout(timeSpan);
-
-		public static implicit operator Timeout(string timeSpan) => new Timeout(timeSpan);
-
-		public override string ToString() => _timeout;
-	}
-
-	internal class TimeoutJsonConverter : JsonConverter
-	{
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			writer.WriteValue((string)value);
-		}
-
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-		{
-			if (reader.TokenType != JsonToken.String) return null;
-			var value = (string)reader.Value;
-			return new Timeout(value);
-		}
-
-		public override bool CanConvert(Type objectType) => true;
 	}
 }

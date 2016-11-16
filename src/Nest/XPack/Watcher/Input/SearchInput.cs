@@ -32,7 +32,7 @@ namespace Nest
 		/// This setting overrides the default search operations timeouts.
 		/// </summary>
 		[JsonProperty("timeout")]
-		Timeout Timeout { get; set; }
+		Time Timeout { get; set; }
 	}
 
 	/// <inheritdoc />
@@ -45,7 +45,7 @@ namespace Nest
 		public ISearchInputRequest Request { get; set; }
 
 		/// <inheritdoc />
-		public Timeout Timeout { get; set; }
+		public Time Timeout { get; set; }
 
 		internal override void WrapInContainer(IInputContainer container) => container.Search = this;
 	}
@@ -56,7 +56,7 @@ namespace Nest
 	{
 		IEnumerable<string> ISearchInput.Extract { get; set; }
 		ISearchInputRequest ISearchInput.Request { get; set; }
-		Timeout ISearchInput.Timeout { get; set; }
+		Time ISearchInput.Timeout { get; set; }
 
 		/// <inheritdoc />
 		public SearchInputDescriptor Request(Func<SearchInputRequestDescriptor, ISearchInputRequest> selector) =>
@@ -71,7 +71,7 @@ namespace Nest
 			Assign(a => a.Extract = extract);
 
 		/// <inheritdoc />
-		public SearchInputDescriptor Timeout(string timeout) =>
+		public SearchInputDescriptor Timeout(Time timeout) =>
 			Assign(a => a.Timeout = timeout);
 	}
 }

@@ -28,7 +28,7 @@ namespace Nest
 		ISearchTemplateRequest Template { get; set; }
 
 		[JsonProperty("timeout")]
-		Timeout Timeout { get; set; }
+		Time Timeout { get; set; }
 	}
 
 	public class SearchTransform : TransformBase, ISearchTransform
@@ -39,7 +39,7 @@ namespace Nest
 		public IEnumerable<TypeName> Type { get; set; }
 		public ISearchRequest Body { get; set; }
 		public ISearchTemplateRequest Template { get; set; }
-		public Timeout Timeout { get; set; }
+		public Time Timeout { get; set; }
 
 		internal override void WrapInContainer(ITransformContainer container) => container.Search = this;
 	}
@@ -52,7 +52,7 @@ namespace Nest
 		IEnumerable<TypeName> ISearchTransform.Type { get; set; }
 		ISearchRequest ISearchTransform.Body { get; set; }
 		ISearchTemplateRequest ISearchTransform.Template { get; set; }
-		Timeout ISearchTransform.Timeout { get; set; }
+		Time ISearchTransform.Timeout { get; set; }
 
 		public SearchTransformDescriptor SearchType(SearchType searchType) => Assign(a => a.SearchType = searchType);
 
@@ -77,7 +77,7 @@ namespace Nest
 		public SearchTransformDescriptor Template<T>(Func<SearchTemplateDescriptor<T>, ISearchTemplateRequest> selector) where T : class =>
 			Assign(a => a.Template = selector.InvokeOrDefault(new SearchTemplateDescriptor<T>()));
 
-		public SearchTransformDescriptor Timeout(Timeout timeout) =>
+		public SearchTransformDescriptor Timeout(Time timeout) =>
 			Assign(a => a.Timeout = timeout);
 	}
 }

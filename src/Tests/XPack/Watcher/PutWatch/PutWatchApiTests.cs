@@ -92,7 +92,9 @@ namespace Tests.XPack.Watcher.PutWatch
 												lat = "52.374031",
 												lon = "4.88969",
 												appid = "appid"
-											}
+											},
+											connection_timeout = "3s",
+											read_timeout = "500ms"
 										},
 										response_content_type = "text"
 									}
@@ -237,6 +239,8 @@ namespace Tests.XPack.Watcher.PutWatch
 									.Add("lon", "4.88969")
 									.Add("appid", "appid")
 								)
+								.ConnectionTimeout("3s")
+								.ReadTimeout(TimeSpan.FromMilliseconds(500))
 							)
 							.ResponseContentType(ResponseContentType.Text)
 						)
@@ -352,7 +356,9 @@ namespace Tests.XPack.Watcher.PutWatch
 										{ "lat", "52.374031" },
 										{ "lon", "4.88969" },
 										{ "appid", "appid" },
-									}
+									},
+									ConnectionTimeout = "3s",
+									ReadTimeout = TimeSpan.FromMilliseconds(500)
 								},
 								ResponseContentType = ResponseContentType.Text
 							}

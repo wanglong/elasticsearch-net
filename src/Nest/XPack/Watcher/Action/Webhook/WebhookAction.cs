@@ -34,9 +34,9 @@ namespace Nest
 
 		public IHttpInputProxy Proxy { get; set; }
 
-		public Timeout ConnectionTimeout { get; set; }
+		public Time ConnectionTimeout { get; set; }
 
-		public Timeout ReadTimeout { get; set; }
+		public Time ReadTimeout { get; set; }
 
 		public string Body { get; set; }
 
@@ -69,9 +69,9 @@ namespace Nest
 
 		IHttpInputProxy IHttpInputRequest.Proxy { get; set; }
 
-		Timeout IHttpInputRequest.ConnectionTimeout { get; set; }
+		Time IHttpInputRequest.ConnectionTimeout { get; set; }
 
-		Timeout IHttpInputRequest.ReadTimeout { get; set; }
+		Time IHttpInputRequest.ReadTimeout { get; set; }
 
 		string IHttpInputRequest.Body { get; set; }
 
@@ -87,7 +87,7 @@ namespace Nest
 		public WebhookActionDescriptor Body(string body) => Assign(a => a.Body = body);
 
 		/// <inheritdoc />
-		public WebhookActionDescriptor ConnectionTimeout(TimeSpan connectionTimeout) => Assign(a => a.ConnectionTimeout = connectionTimeout);
+		public WebhookActionDescriptor ConnectionTimeout(Time connectionTimeout) => Assign(a => a.ConnectionTimeout = connectionTimeout);
 
 		/// <inheritdoc />
 		public WebhookActionDescriptor Headers(Func<FluentDictionary<string, string>, FluentDictionary<string, string>> headersSelector) =>
@@ -122,7 +122,7 @@ namespace Nest
 			Assign(a => a.Proxy = proxySelector.Invoke(new HttpInputProxyDescriptor()));
 
 		/// <inheritdoc />
-		public WebhookActionDescriptor ReadTimeout(Timeout readTimeout) => Assign(a => a.ReadTimeout = readTimeout);
+		public WebhookActionDescriptor ReadTimeout(Time readTimeout) => Assign(a => a.ReadTimeout = readTimeout);
 
 		/// <inheritdoc />
 		public WebhookActionDescriptor Scheme(ConnectionScheme scheme) => Assign(a => a.Scheme = scheme);

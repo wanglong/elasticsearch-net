@@ -3,6 +3,7 @@
 namespace Nest
 {
 	[JsonObject]
+	[JsonConverter(typeof(ReadAsTypeJsonConverter<EmailBody>))]
 	public interface IEmailBody
 	{
 		[JsonProperty("text")]

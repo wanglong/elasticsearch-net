@@ -18,9 +18,8 @@ namespace Nest
 		[JsonProperty("transform")]
 		TransformContainer Transform { get; set; }
 
-		// TODO: Should this be a Time (or similar type)?
 		[JsonIgnore]
-		string ThrottlePeriod { get; set; }
+		Time ThrottlePeriod { get; set; }
 	}
 
 	public abstract class ActionBase : IAction
@@ -36,12 +35,10 @@ namespace Nest
 
 		public TransformContainer Transform { get; set; }
 
-		public string ThrottlePeriod { get; set; }
+		public Time ThrottlePeriod { get; set; }
 
-		//always evaluate to false so that each side of && equation is evaluated
 		public static bool operator false(ActionBase a) => false;
 
-		//always evaluate to false so that each side of && equation is evaluated
 		public static bool operator true(ActionBase a) => false;
 
 		public static ActionBase operator &(ActionBase left, ActionBase right)
@@ -91,13 +88,13 @@ namespace Nest
 				var actionJson = property.Value as JObject;
 				if (actionJson == null) continue;
 
-				string throttlePeriod = null;
+				Time throttlePeriod = null;
 				IAction action = null;
 
 				foreach (var prop in actionJson.Properties())
 				{
 					if (prop.Name == "throttle_period")
-						throttlePeriod = prop.Value.Value<string>();
+						throttlePeriod = prop.Value.ToObject<Time>();
 					else
 					{
 						var actionType = prop.Name.ToEnum<ActionType>();
@@ -152,10 +149,10 @@ namespace Nest
 					var action = kvp.Value;
 					writer.WritePropertyName(kvp.Key);
 					writer.WriteStartObject();
-					if (!action.ThrottlePeriod.IsNullOrEmpty())
+					if (action.ThrottlePeriod != null)
 					{
 						writer.WritePropertyName("throttle_period");
-						writer.WriteValue(action.ThrottlePeriod);
+						serializer.Serialize(writer, action.ThrottlePeriod);
 					}
 					writer.WritePropertyName(kvp.Value.ActionType.GetStringValue());
 					serializer.Serialize(writer, action);

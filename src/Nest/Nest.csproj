@@ -1375,6 +1375,7 @@
     <Compile Include="XPack\Watcher\Schedule\DailySchedule.cs" />
     <Compile Include="XPack\Watcher\Schedule\Day.cs" />
     <Compile Include="XPack\Watcher\Schedule\HourlySchedule.cs" />
+    <Compile Include="XPack\Watcher\Schedule\Interval.cs" />
     <Compile Include="XPack\Watcher\Schedule\Month.cs" />
     <Compile Include="XPack\Watcher\Schedule\MonthlySchedule.cs" />
     <Compile Include="XPack\Watcher\Schedule\ScheduleBase.cs" />
