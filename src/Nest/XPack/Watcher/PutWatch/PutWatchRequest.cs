@@ -18,9 +18,9 @@ namespace Nest
 		[JsonProperty("actions")]
 		Actions Actions { get; set; }
 
-		[JsonProperty("meta")]
+		[JsonProperty("metadata")]
 		[JsonConverter(typeof(VerbatimDictionaryKeysJsonConverter))]
-		IDictionary<string, object> Meta { get; set; }
+		IDictionary<string, object> Metadata { get; set; }
 
 		[JsonProperty("throttle_period")]
 		string ThrottlePeriod { get; set; }
@@ -31,7 +31,9 @@ namespace Nest
 
 	public partial class PutWatchRequest
 	{
-		public IDictionary<string, object> Meta { get; set; }
+		public PutWatchRequest() { }
+
+		public IDictionary<string, object> Metadata { get; set; }
 
 		public TriggerContainer Trigger { get; set; }
 
@@ -54,7 +56,7 @@ namespace Nest
 		Actions IPutWatchRequest.Actions { get; set; }
 		ConditionContainer IPutWatchRequest.Condition { get; set; }
 		InputContainer IPutWatchRequest.Input { get; set; }
-		IDictionary<string, object> IPutWatchRequest.Meta { get; set; }
+		IDictionary<string, object> IPutWatchRequest.Metadata { get; set; }
 		string IPutWatchRequest.ThrottlePeriod { get; set; }
 		TransformContainer IPutWatchRequest.Transform { get; set; }
 		TriggerContainer IPutWatchRequest.Trigger { get; set; }
@@ -68,11 +70,11 @@ namespace Nest
 		public PutWatchDescriptor Input(Func<InputDescriptor, InputContainer> selector) =>
 			Assign(a => a.Input = selector.InvokeOrDefault(new InputDescriptor()));
 
-		public PutWatchDescriptor Meta(Func<FluentDictionary<string, object>, FluentDictionary<string, object>> paramsDictionary) =>
-			Assign(a => a.Meta = paramsDictionary(new FluentDictionary<string, object>()));
+		public PutWatchDescriptor Metadata(Func<FluentDictionary<string, object>, FluentDictionary<string, object>> paramsDictionary) =>
+			Assign(a => a.Metadata = paramsDictionary(new FluentDictionary<string, object>()));
 
-		public PutWatchDescriptor Meta(Dictionary<string, object> paramsDictionary) =>
-			Assign(a => a.Meta = paramsDictionary);
+		public PutWatchDescriptor Metadata(Dictionary<string, object> paramsDictionary) =>
+			Assign(a => a.Metadata = paramsDictionary);
 
 		public PutWatchDescriptor ThrottlePeriod(string throttlePeriod) => Assign(a => a.ThrottlePeriod = throttlePeriod);
 

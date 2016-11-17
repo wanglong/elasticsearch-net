@@ -6,6 +6,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Nest
 {
+	[JsonObject(MemberSerialization.OptIn)]
 	public interface IExecuteWatchResponse : IResponse
 	{
 		[JsonProperty("_id")]
@@ -41,6 +42,7 @@ namespace Nest
 		DeletedWhileQueued
 	}
 
+	[JsonObject]
 	public class WatchRecord
 	{
 		[JsonProperty("watch_id")]
@@ -150,8 +152,38 @@ namespace Nest
 		[JsonProperty("logging")]
 		public LoggingActionResult Logging { get; set; }
 
+		[JsonProperty("pagerduty")]
+		public PagerDutyActionResult PagerDuty { get; set; }
+
+		[JsonProperty("hipchat")]
+		public HipChatActionResult HipChat { get; set; }
+
+		[JsonProperty("slack")]
+		public SlackActionResult Slack { get; set; }
+
 		[JsonProperty("reason")]
 		public string Reason { get; set; }
+	}
+
+	//TODO: implement
+	[JsonObject]
+	public class PagerDutyActionResult
+	{
+
+	}
+
+	//TODO: implement
+	[JsonObject]
+	public class HipChatActionResult
+	{
+
+	}
+
+	//TODO: implement
+	[JsonObject]
+	public class SlackActionResult
+	{
+
 	}
 
 	[JsonObject]
