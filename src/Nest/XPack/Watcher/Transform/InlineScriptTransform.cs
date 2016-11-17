@@ -1,22 +1,36 @@
-﻿namespace Nest
-{
-	public interface IInlineScriptTransform : IInlineScript, IScriptTransform { }
+﻿using Newtonsoft.Json;
 
-	public class InlineScriptTransform : InlineScript, IInlineScriptTransform
+namespace Nest
+{
+	[JsonObject(MemberSerialization.OptIn)]
+	public interface IInlineScriptTransform : IScriptTransform
 	{
-		public InlineScriptTransform(string script) : base(script)
-		{
-		}
+		[JsonProperty("inline")]
+		string Inline { get; set; }
 	}
 
-	public class InlineScriptTransformDescriptor : InlineScriptDescriptor, IInlineScriptTransform
+	public class InlineScriptTransform : ScriptTransformBase, IInlineScriptTransform
 	{
-		public InlineScriptTransformDescriptor(string inline) : base(inline)
+		public InlineScriptTransform(string script)
 		{
+			this.Inline = script;
+		}
+
+		public string Inline { get; set; }
+	}
+
+	public class InlineScriptTransformDescriptor
+		: ScriptTransformDescriptorBase<InlineScriptTransformDescriptor, IInlineScriptTransform>, IInlineScriptTransform
+	{
+		public InlineScriptTransformDescriptor(string inline)
+		{
+			this.Inline = inline;
 		}
 
 		public InlineScriptTransformDescriptor()
 		{
 		}
+
+		public string Inline { get; set; }
 	}
 }

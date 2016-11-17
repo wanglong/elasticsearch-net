@@ -20,7 +20,7 @@ namespace Nest
 	}
 
 	[JsonObject]
-	public class IndicesOptions
+	public class IndicesOptions : IIndicesOptions
 	{
 		public ExpandWildcards? ExpandWildcards { get; set; }
 

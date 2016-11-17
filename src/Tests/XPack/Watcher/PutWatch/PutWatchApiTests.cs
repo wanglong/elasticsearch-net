@@ -114,11 +114,21 @@ namespace Tests.XPack.Watcher.PutWatch
 												size = 0,
 												aggs = new
 												{
-													top_project_tags = new
+													nested_tags = new
 													{
-														terms = new
+														nested = new
 														{
-															field = "tags.name"
+															path = "tags"
+														},
+														aggs = new
+														{
+															top_project_tags = new
+															{
+																terms = new
+																{
+																	field = "tags.name"
+																}
+															}
 														}
 													}
 												}
@@ -129,7 +139,50 @@ namespace Tests.XPack.Watcher.PutWatch
 							}
 						}
 					}
-
+				},
+				transform = new
+				{
+					chain = new object[]
+					{
+						new
+						{
+							search = new
+							{
+								request = new
+								{
+									indices = new [] { "project" },
+									indices_options = new
+									{
+										expand_wildcards = "open",
+										ignore_unavailable = true
+									},
+									search_type = "dfs_query_then_fetch",
+									body = new
+									{
+										query = new
+										{
+											match = new
+											{
+												state = new
+												{
+													query = "stable"
+												}
+											}
+										}
+									}
+								},
+								timeout = "10s"
+							}
+						},
+						new
+						{
+							script = new
+							{
+								inline = "return [ time : ctx.trigger.scheduled_time ]",
+								lang = "groovy"
+							}
+						}
+					}
 				},
 				condition = new
 				{
@@ -252,12 +305,48 @@ namespace Tests.XPack.Watcher.PutWatch
 								.Body<Project>(b => b
 									.Size(0)
 									.Aggregations(a => a
-										.Terms("top_project_tags", ta => ta
-											.Field(f => f.Tags.First().Name)
+										.Nested("nested_tags", n => n
+											.Path(np => np.Tags)
+											.Aggregations(aa => aa
+												.Terms("top_project_tags", ta => ta
+													.Field(f => f.Tags.First().Name)
+												)
+											)
 										)
 									)
 								)
 							)
+						)
+					)
+				)
+			)
+			.Transform(tr => tr
+				.Chain(ct => ct
+					.Transform(ctt => ctt
+						.Search(st => st
+							.Request(str => str
+								.Indices(typeof(Project))
+								.SearchType(SearchType.DfsQueryThenFetch)
+								.IndicesOptions(io => io
+									.ExpandWildcards(ExpandWildcards.Open)
+									.IgnoreUnavailable()
+								)
+								.Body<Project>(b => b
+									.Query(q => q
+										.Match(m => m
+											.Field("state")
+											.Query(StateOfBeing.Stable.ToString().ToLowerInvariant())
+										)
+									)
+								)
+							)
+							.Timeout("10s")
+						)
+					)
+					.Transform(ctt => ctt
+						.Script(st => st
+							.Inline("return [ time : ctx.trigger.scheduled_time ]")
+							.Lang("groovy")
 						)
 					)
 				)
@@ -372,13 +461,49 @@ namespace Tests.XPack.Watcher.PutWatch
 									Body = new SearchRequest<Project>
 									{
 										Size = 0,
-										Aggregations = new TermsAggregation("top_project_tags")
+										Aggregations = new NestedAggregation("nested_tags")
 										{
-											Field = Infer.Field<Project>(p => p.Tags.First().Name)
+											Path = Infer.Field<Project>(p => p.Tags),
+											Aggregations = new TermsAggregation("top_project_tags")
+											{
+												Field = Infer.Field<Project>(p => p.Tags.First().Name)
+											}
 										}
 									}
 								}
 							}
+						}
+					}
+				},
+				Transform = new ChainTransform
+				{
+					Transforms = new TransformContainer[]
+					{
+						new SearchTransform
+						{
+							Request = new SearchInputRequest
+							{
+								Indices = new IndexName[] { typeof(Project) },
+								SearchType = SearchType.DfsQueryThenFetch,
+								IndicesOptions = new IndicesOptions
+								{
+									ExpandWildcards = ExpandWildcards.Open,
+									IgnoreUnavailable = true
+								},
+								Body = new SearchRequest<Project>(typeof(Project))
+								{
+									Query = new MatchQuery
+									{
+										Field = "state",
+										Query = StateOfBeing.Stable.ToString().ToLowerInvariant()
+									}
+								}
+							},
+							Timeout = "10s",
+						},
+						new InlineScriptTransform("return [ time : ctx.trigger.scheduled_time ]")
+						{
+							Lang = "groovy"
 						}
 					}
 				},

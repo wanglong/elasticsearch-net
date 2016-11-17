@@ -1,22 +1,37 @@
-﻿namespace Nest
-{
-	public interface IFileScriptTransform : IFileScript, IScriptTransform { }
+﻿using Newtonsoft.Json;
 
-	public class FileScriptTransform : FileScript, IFileScriptTransform
+namespace Nest
+{
+	[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+	public interface IFileScriptTransform :
+		IScriptTransform
 	{
-		public FileScriptTransform(string file) : base(file)
-		{
-		}
+		[JsonProperty("file")]
+		string File { get; set; }
 	}
 
-	public class FileScriptTransformDescriptor : FileScriptDescriptor, IFileScriptTransform
+	public class FileScriptTransform : ScriptTransformBase, IFileScriptTransform
 	{
-		public FileScriptTransformDescriptor(string file) : base(file)
+		public FileScriptTransform(string file)
 		{
+			this.File = file;
+		}
+
+		public string File { get; set; }
+	}
+
+	public class FileScriptTransformDescriptor
+		: ScriptTransformDescriptorBase<FileScriptTransformDescriptor, IFileScriptTransform>, IFileScriptTransform
+	{
+		public FileScriptTransformDescriptor(string file)
+		{
+			this.File = file;
 		}
 
 		public FileScriptTransformDescriptor()
 		{
 		}
+
+		public string File { get; set; }
 	}
 }

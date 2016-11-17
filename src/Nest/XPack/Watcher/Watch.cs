@@ -18,6 +18,9 @@ namespace Nest
 		[JsonProperty("trigger")]
 		public ITriggerContainer Trigger { get; internal set; }
 
+		[JsonProperty("transform")]
+		public ITransformContainer Transform { get; internal set; }
+
 		[JsonProperty("actions")]
 		[JsonConverter(typeof(ActionsJsonConverter))]
 		public IDictionary<string, IAction> Actions { get; internal set; }

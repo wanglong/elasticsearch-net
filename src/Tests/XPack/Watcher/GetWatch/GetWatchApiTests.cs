@@ -4,6 +4,7 @@ using FluentAssertions;
 using Nest;
 using Tests.Framework;
 using Tests.Framework.Integration;
+using Tests.Framework.MockData;
 
 namespace Tests.XPack.Watcher.GetWatch
 {
@@ -24,6 +25,37 @@ namespace Tests.XPack.Watcher.GetWatch
 					.Trigger(t => t
 						.Schedule(s => s
 							.Cron("0 5 9 * * ?")
+						)
+					)
+					.Transform(tr => tr
+						.Chain(ct => ct
+							.Transform(ctt => ctt
+								.Search(st => st
+									.Request(str => str
+										.Indices(typeof(Project))
+										.SearchType(SearchType.DfsQueryThenFetch)
+										.IndicesOptions(io => io
+											.ExpandWildcards(ExpandWildcards.Open)
+											.IgnoreUnavailable()
+										)
+										.Body<Project>(b => b
+											.Query(q => q
+												.Match(m => m
+													.Field("state")
+													.Query(StateOfBeing.Stable.ToString().ToLowerInvariant())
+												)
+											)
+										)
+									)
+									.Timeout("10s")
+								)
+							)
+							.Transform(ctt => ctt
+								.Script(st => st
+									.Inline("return [ time : ctx.trigger.scheduled_time ]")
+									.Lang("groovy")
+								)
+							)
 						)
 					)
 					.Actions(a => a
@@ -97,6 +129,13 @@ namespace Tests.XPack.Watcher.GetWatch
 			var simpleInput = watch.Input.Simple;
 			simpleInput.Should().NotBeNull();
 			simpleInput.Payload.Should().ContainKey("key");
+
+			watch.Transform.Should().NotBeNull();
+			watch.Transform.Chain.Should().NotBeNull();
+			var chainTransforms = watch.Transform.Chain.Transforms;
+			chainTransforms.Should().NotBeNull().And.HaveCount(2);
+			//chainTransforms.First().Should().NotBeNull().And.BeOfType<ISearchTransform>();
+			//chainTransforms.Last().Should().NotBeNull().And.BeOfType<IScriptTransform>();
 
 			watch.Condition.Should().NotBeNull();
 			watch.Condition.Always.Should().NotBeNull();

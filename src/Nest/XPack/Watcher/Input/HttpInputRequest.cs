@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -42,7 +40,6 @@ namespace Nest
 		/// The HTTP method. Defaults to <see cref="HttpInputMethod.Get"/>
 		/// </summary>
 		[JsonProperty("method")]
-		[JsonConverter(typeof(StringEnumConverter))]
 		HttpInputMethod? Method { get; set; }
 
 		/// <summary>

@@ -1399,7 +1399,7 @@
     <Compile Include="XPack\Watcher\Input\SearchInputRequest.cs" />
     <Compile Include="XPack\Watcher\Input\SearchInput.cs" />
     <Compile Include="XPack\Watcher\Transform\ChainTransform.cs" />
-    <Compile Include="XPack\Watcher\Transform\ScriptTransform.cs" />
+    <Compile Include="XPack\Watcher\Transform\ScriptTransformBase.cs" />
     <Compile Include="XPack\Watcher\Transform\SearchTransform.cs" />
     <Compile Include="XPack\Watcher\Transform\TransformBase.cs" />
     <Compile Include="XPack\Watcher\Transform\TransformContainer.cs" />

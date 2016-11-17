@@ -695,6 +695,8 @@
     <Compile Include="XPack\Watcher\DeactivateWatch\DeactivateWatchApiTests.cs" />
     <Compile Include="XPack\Watcher\ActivateWatch\ActivateWatchApiTests.cs" />
     <Compile Include="XPack\Watcher\DeleteWatch\DeleteWatchUrlTests.cs" />
+    <Compile Include="XPack\Watcher\ExecuteWatch\ExecuteWatchUrlTests.cs" />
+    <Compile Include="XPack\Watcher\ExecuteWatch\ExecuteWatchApiTests.cs" />
     <Compile Include="XPack\Watcher\GetWatch\GetWatchUrlTests.cs" />
     <Compile Include="XPack\Watcher\GetWatch\GetWatchApiTests.cs" />
     <Compile Include="XPack\Watcher\DeleteWatch\DeleteWatchApiTests.cs" />

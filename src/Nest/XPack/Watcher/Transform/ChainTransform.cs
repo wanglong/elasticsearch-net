@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Nest
 {
 	[JsonObject]
-	[JsonConverter(typeof(ReadAsTypeJsonConverter<ChainTransform>))]
+	[JsonConverter(typeof(ChainTransformJsonConverter))]
 	public interface IChainTransform : ITransform
 	{
 		ICollection<TransformContainer> Transforms { get; set; }
@@ -42,8 +41,37 @@ namespace Nest
 		public ChainTransformDescriptor Transform(Func<TransformDescriptor, TransformContainer> selector)
 		{
 			if (Self.Transforms == null) Self.Transforms = new List<TransformContainer>();
-			Self.Transforms.Add(selector.InvokeOrDefault(new TransformDescriptor()));
+			Self.Transforms.AddIfNotNull(selector?.Invoke(new TransformDescriptor()));
 			return this;
 		}
+	}
+
+	internal class ChainTransformJsonConverter : JsonConverter
+	{
+		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		{
+			writer.WriteStartArray();
+
+			var chainTransform = (IChainTransform)value;
+
+			if (chainTransform != null)
+			{
+				foreach (var transform in chainTransform.Transforms)
+				{
+					serializer.Serialize(writer, transform);
+				}
+			}
+
+			writer.WriteEndArray();
+		}
+
+		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		{
+			if (reader.TokenType != JsonToken.StartArray) return null;
+			var transforms = serializer.Deserialize<ICollection<TransformContainer>>(reader);
+			return new ChainTransform(transforms);
+		}
+
+		public override bool CanConvert(Type objectType) => true;
 	}
 }
